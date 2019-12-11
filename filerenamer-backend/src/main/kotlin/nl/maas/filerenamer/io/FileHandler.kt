@@ -28,7 +28,7 @@ class FileHandler {
 
         var map = HashMap<File, List<File>>()
         if (files.isNotEmpty()) {
-            map.put(path, files);
+            map.put(path, files.filter { file -> !".file-renamer-settings.xml".equals(file.name) });
         }
         dirs.map { file -> searchFilesIn(path) }.forEach { dirMap -> map.putAll(dirMap) }
         return map
