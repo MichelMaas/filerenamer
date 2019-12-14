@@ -4,7 +4,6 @@ import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.extrapolation.NewNameExtrapolator
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator.Companion.SEQUENCE.Companion.forValue
-import nl.maas.filerenamer.extrapolation.SequenceNumberExtrapolator
 import nl.maas.filerenamer.io.FileHandler
 import nl.maas.filerenamer.io.RenameOrder
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -27,7 +26,7 @@ private fun processFiles(filesIn: Map<File, List<File>>, key: File, sequenceExtr
     val fileData = filesIn.get(key)!!.map { file -> FileMetaData(file) }
     sequenceExtrapolator.findSequenceForFiles(fileData)
     NewNameExtrapolator().determineNameForFiles(fileData)
-    FileHandler().saveFiles(*fileData.filter { fileMetaData -> !fileMetaData.newName.isNullOrBlank() && !fileMetaData.newName.equals(fileMetaData.file.name) }.map { fileMetaData -> RenameOrder(fileMetaData.file, fileMetaData.newName!!) }.toTypedArray())
+    FileHandler().renameFiles(*fileData.filter { fileMetaData -> !fileMetaData.newName.isNullOrBlank() && !fileMetaData.newName.equals(fileMetaData.file.name) }.map { fileMetaData -> RenameOrder(fileMetaData.file, fileMetaData.newName!!) }.toTypedArray())
 }
 
 private fun requestSequenceExtrapolator(): SequenceExtrapolator {

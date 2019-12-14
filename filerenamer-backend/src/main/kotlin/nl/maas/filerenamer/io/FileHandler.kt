@@ -2,9 +2,7 @@ package nl.maas.filerenamer.io
 
 import java.io.File
 import java.io.FileFilter
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
+import java.nio.file.*
 
 class FileHandler {
 
@@ -19,9 +17,18 @@ class FileHandler {
         return files;
     }
 
-    fun saveFiles(vararg files:RenameOrder ){
-        files.forEach { file -> Files.move(file.file.toPath(),file.file.toPath().resolveSibling(file.newName)) }
-        files.forEach { renameOrder -> println("Renamed ${renameOrder.file.name} to ${renameOrder.newName} in ${renameOrder.file.parent}") }
+    fun renameFiles(vararg files:RenameOrder ){
+        files.forEach { file -> moveFile(file) }
+    }
+
+    private fun moveFile(renameOrder: RenameOrder) {
+        if(Paths.get("${renameOrder.file.parent}/${renameOrder.newName}").toFile().exists()){
+            println("File ${renameOrder.newName} already exists in '${renameOrder.file.parent}'")
+            print("Replace existing file? (Y/N): ")
+            if("N".equals(readLine()!!.toUpperCase())) return
+        }
+        Files.move(renameOrder.file.toPath(), renameOrder.file.toPath().resolveSibling(renameOrder.newName), StandardCopyOption.REPLACE_EXISTING)
+        println("Renamed ${renameOrder.file.name} to ${renameOrder.newName} in ${renameOrder.file.parent}")
     }
 
     private fun searchFilesIn(path: File): Map<File, List<File>> {
