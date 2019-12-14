@@ -4,11 +4,12 @@ import java.io.File
 import java.io.FileFilter
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class FileHandler {
 
     fun searchFilesIn(path: String): Map<File, List<File>> {
-        val headDir = Path.of(path).toFile()
+        val headDir = Paths.get(path).toFile()
         if (!headDir.exists())
             throw IllegalStateException("File ${path} not found!")
         var files = HashMap<File, List<File>>()
@@ -20,6 +21,7 @@ class FileHandler {
 
     fun saveFiles(vararg files:RenameOrder ){
         files.forEach { file -> Files.move(file.file.toPath(),file.file.toPath().resolveSibling(file.newName)) }
+        files.forEach { renameOrder -> println("Renamed ${renameOrder.file.name} to ${renameOrder.newName} in ${renameOrder.file.parent}") }
     }
 
     private fun searchFilesIn(path: File): Map<File, List<File>> {
@@ -30,7 +32,7 @@ class FileHandler {
         if (files.isNotEmpty()) {
             map.put(path, files.filter { file -> !".file-renamer-settings.xml".equals(file.name) });
         }
-        dirs.map { file -> searchFilesIn(path) }.forEach { dirMap -> map.putAll(dirMap) }
+        dirs.map { file -> searchFilesIn(file.absolutePath) }.forEach { dirMap -> map.putAll(dirMap) }
         return map
     }
 }

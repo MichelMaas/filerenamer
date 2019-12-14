@@ -7,8 +7,8 @@ data class FileMetaData(val file: File) {
     val delimiters: List<String> = listOf()
     lateinit var dirName: String
     lateinit var name: String
-    var potentialSequenceNumberIndexes: List<Int>? = null
-    var sequence: Int? = null
+    var potentialSequenceNumbers: List<Int>? = null
+    var sequence: String? = null
     var newName: String? = null
     lateinit var extrapolatedName: List<String>
 
@@ -18,8 +18,7 @@ data class FileMetaData(val file: File) {
         dirName = file.parentFile.name
     }
 
-    fun hasPotentialSequenceIndexFor(number: Int): Boolean {
-        return potentialSequenceNumberIndexes?.any { i -> number.equals(extrapolatedName.get(i).toIntOrNull()) }
-                ?: false
+    fun hasPotentialSequenceFor(number: Int): Boolean {
+        return potentialSequenceNumbers?.contains(number)?:false
     }
 }
