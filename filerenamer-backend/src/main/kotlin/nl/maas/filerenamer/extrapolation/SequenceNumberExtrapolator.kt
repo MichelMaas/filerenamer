@@ -9,8 +9,9 @@ class SequenceNumberExtrapolator: SequenceExtrapolator {
     }
 
     private fun determineSequence(fileData: List<FileMetaData>) {
-        val min = determineSmallestNumber(fileData)
-        val max = min + fileData.size-1
+
+        val min = determineSequenceNumbers(fileData,"MIN")
+        val max = determineSequenceNumbers(fileData,"MAX")
         val sequenceMap = HashMap<Int, List<FileMetaData>>()
         for (i in min..max) {
             val list = fileData.filter { fileMetaData -> fileMetaData.hasPotentialSequenceFor(i) }
@@ -39,9 +40,14 @@ class SequenceNumberExtrapolator: SequenceExtrapolator {
 
     }
 
-    private fun determineSmallestNumber(fileData: List<FileMetaData>): Int {
-        val numbers = fileData.flatMap { fileMetaData -> fileMetaData.potentialSequenceNumbers?: listOf() }
-        return numbers.find { nr -> numbers.containsAll((nr..nr+fileData.size-1).toList()) }?:0
+    private fun determineSequenceNumbers(fileData: List<FileMetaData>, edgeNumber: String): Int {
+        var numbers = fileData.flatMap { fileMetaData -> fileMetaData.potentialSequenceNumbers?: listOf() }
+        val lowest = numbers.sorted().get(0)
+        val lastValid = numbers.sorted().reduceIndexed { index, previous, current -> if (current - previous > 10) previous else current }
+        val range = lowest..lastValid
+        val notPresent = range.filterNot { nr -> numbers.contains(nr) }
+
+        return if(edgeNumber.equals("MIN")) lowest else lastValid
     }
 
     private fun determineSequencePositions(fileData: FileMetaData) {
