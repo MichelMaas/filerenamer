@@ -2,13 +2,12 @@ package nl.maas.filerenamer.io
 
 import java.io.File
 import java.io.FileFilter
-import java.nio.file.Files
-import java.nio.file.Path
+import java.nio.file.*
 
 class FileHandler {
 
     fun searchFilesIn(path: String): Map<File, List<File>> {
-        val headDir = Path.of(path).toFile()
+        val headDir = Paths.get(path).toFile()
         if (!headDir.exists())
             throw IllegalStateException("File ${path} not found!")
         var files = HashMap<File, List<File>>()
@@ -18,8 +17,18 @@ class FileHandler {
         return files;
     }
 
-    fun saveFiles(vararg files:RenameOrder ){
-        files.forEach { file -> Files.move(file.file.toPath(),file.file.toPath().resolveSibling(file.newName)) }
+    fun renameFiles(vararg files:RenameOrder ){
+        files.forEach { file -> moveFile(file) }
+    }
+
+    private fun moveFile(renameOrder: RenameOrder) {
+        if(Paths.get("${renameOrder.file.parent}/${renameOrder.newName}").toFile().exists()){
+            println("File ${renameOrder.newName} already exists in '${renameOrder.file.parent}'")
+            print("Replace existing file? (Y/N): ")
+            if("N".equals(readLine()!!.toUpperCase())) return
+        }
+        Files.move(renameOrder.file.toPath(), renameOrder.file.toPath().resolveSibling(renameOrder.newName), StandardCopyOption.REPLACE_EXISTING)
+        println("Renamed ${renameOrder.file.name} to ${renameOrder.newName} in ${renameOrder.file.parent}")
     }
 
     private fun searchFilesIn(path: File): Map<File, List<File>> {
@@ -28,9 +37,9 @@ class FileHandler {
 
         var map = HashMap<File, List<File>>()
         if (files.isNotEmpty()) {
-            map.put(path, files);
+            map.put(path, files.filter { file -> !".file-renamer-settings.xml".equals(file.name) });
         }
-        dirs.map { file -> searchFilesIn(path) }.forEach { dirMap -> map.putAll(dirMap) }
+        dirs.map { file -> searchFilesIn(file.absolutePath) }.forEach { dirMap -> map.putAll(dirMap) }
         return map
     }
 }

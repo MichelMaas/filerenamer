@@ -1,0 +1,242 @@
+
+
+Sun Dec  8 21:12:55 2019
+Command line: TestDisk
+
+TestDisk 7.0, Data Recovery Utility, April 2015
+Christophe GRENIER <grenier@cgsecurity.org>
+http://www.cgsecurity.org
+OS: Linux, kernel 4.15.0-72-generic (#81-Ubuntu SMP Tue Nov 26 12:20:02 UTC 2019) x86_64
+Compiler: GCC 7.2
+ext2fs lib: 1.44.1, ntfs lib: libntfs-3g, reiserfs lib: none, ewf lib: none, curses lib: ncurses 6.0
+/dev/sda: LBA, HPA, LBA48 support
+/dev/sda: size       234441648 sectors
+/dev/sda: user_max   234441648 sectors
+/dev/sda: native_max 234441648 sectors
+/dev/sdb: LBA, HPA, LBA48, DCO support
+/dev/sdb: size       3907029168 sectors
+/dev/sdb: user_max   3907029168 sectors
+/dev/sdb: native_max 3907029168 sectors
+Warning: can't get size for Disk /dev/mapper/control - 0 B - 0 sectors, sector size=512
+/dev/mapper/elementary--vg-root: LBA, HPA, LBA48 support
+/dev/mapper/elementary--vg-root: size       231374848 sectors
+/dev/mapper/elementary--vg-root: user_max   234441648 sectors
+/dev/mapper/elementary--vg-root: native_max 234441648 sectors
+/dev/mapper/elementary--vg-swap_1: LBA, HPA, LBA48 support
+/dev/mapper/elementary--vg-swap_1: size       2007040 sectors
+/dev/mapper/elementary--vg-swap_1: user_max   234441648 sectors
+/dev/mapper/elementary--vg-swap_1: native_max 234441648 sectors
+/dev/dm-0: LBA, HPA, LBA48 support
+/dev/dm-0: size       231374848 sectors
+/dev/dm-0: user_max   234441648 sectors
+/dev/dm-0: native_max 234441648 sectors
+/dev/dm-1: LBA, HPA, LBA48 support
+/dev/dm-1: size       2007040 sectors
+/dev/dm-1: user_max   234441648 sectors
+/dev/dm-1: native_max 234441648 sectors
+Hard disk list
+Disk /dev/sda - 120 GB / 111 GiB - CHS 14593 255 63, sector size=512 - KINGSTON SUV400S37120G, S/N:50026B766800B248, FW:0C3FD6SD
+Disk /dev/sdb - 2000 GB / 1863 GiB - CHS 243201 255 63, sector size=512 - WDC WD20EARS-00MVWB0, S/N:WD-WCAZA8259140, FW:51.0AB51
+Disk /dev/sdc - 1000 GB / 931 GiB - CHS 121597 255 63, sector size=512 - WD Elements 10A8, FW:1042
+Disk /dev/sdd - 32 GB / 29 GiB - CHS 30532 64 32, sector size=512 - SanDisk Cruzer Blade, FW:1.27
+Disk /dev/mapper/elementary--vg-root - 118 GB / 110 GiB - 231374848 sectors, sector size=512 - KINGSTON SUV400S37120G, S/N:50026B766800B248, FW:0C3FD6SD
+Disk /dev/mapper/elementary--vg-swap_1 - 1027 MB / 980 MiB - 2007040 sectors, sector size=512 - KINGSTON SUV400S37120G, S/N:50026B766800B248, FW:0C3FD6SD
+Disk /dev/dm-0 - 118 GB / 110 GiB - 231374848 sectors, sector size=512 - KINGSTON SUV400S37120G, S/N:50026B766800B248, FW:0C3FD6SD
+Disk /dev/dm-1 - 1027 MB / 980 MiB - 2007040 sectors, sector size=512 - KINGSTON SUV400S37120G, S/N:50026B766800B248, FW:0C3FD6SD
+
+Partition table type (auto): EFI GPT
+Disk /dev/sdb - 2000 GB / 1863 GiB - WDC WD20EARS-00MVWB0
+Partition table type: EFI GPT
+
+Analyse Disk /dev/sdb - 2000 GB / 1863 GiB - CHS 243201 255 63
+hdr_size=92
+hdr_lba_self=1
+hdr_lba_alt=3907029167 (expected 3907029167)
+hdr_lba_start=34
+hdr_lba_end=3907029134
+hdr_lba_table=2
+hdr_entries=128
+hdr_entsz=128
+Current partition structure:
+ 1 P MS Data                     2048  172031999  172029952
+
+search_part()
+Disk /dev/sdb - 2000 GB / 1863 GiB - CHS 243201 255 63
+NTFS at 0/32/33
+filesystem size           172029952
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+NTFS part_offset=1048576, part_size=88079335424, sector_size=512
+NTFS partition cannot be added (part_offset<part_size).
+NTFS at 0/32/33
+filesystem size           172029952
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                     2048  172031999  172029952
+     NTFS, blocksize=4096, 88 GB / 82 GiB
+NTFS at 10708/126/43
+filesystem size           2048000000
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+NTFS part_offset=88080384000, part_size=1048576000000, sector_size=512
+NTFS partition cannot be added (part_offset<part_size).
+NTFS at 10708/126/43
+filesystem size           2048000000
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                172032000 2220031999 2048000000
+     NTFS, blocksize=4096, 1048 GB / 976 GiB
+NTFS at 138190/185/44
+filesystem size           1686990848
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                533043201 2220034048 1686990848
+     NTFS found using backup sector, blocksize=4096, 863 GB / 804 GiB
+NTFS at 138190/185/44
+filesystem size           1686990848
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data               2220034048 3907024895 1686990848
+     NTFS, blocksize=4096, 863 GB / 804 GiB
+
+Results
+   P MS Data                     2048  172031999  172029952
+     NTFS, blocksize=4096, 88 GB / 82 GiB
+     MS Data                172032000 2220031999 2048000000
+     NTFS, blocksize=4096, 1048 GB / 976 GiB
+     MS Data                533043201 2220034048 1686990848
+     NTFS found using backup sector, blocksize=4096, 863 GB / 804 GiB
+     MS Data               2220034048 3907024895 1686990848
+     NTFS, blocksize=4096, 863 GB / 804 GiB
+
+Hint for advanced users. dmsetup may be used if you prefer to avoid to rewrite the partition table for the moment:
+echo "0 172029952 linear /dev/sdb 2048" | dmsetup create test0
+echo "0 2048000000 linear /dev/sdb 172032000" | dmsetup create test1
+echo "0 1686990848 linear /dev/sdb 533043201" | dmsetup create test2
+echo "0 1686990848 linear /dev/sdb 2220034048" | dmsetup create test3
+Invalid partition structure.
+
+Interface Advanced
+hdr_size=92
+hdr_lba_self=1
+hdr_lba_alt=3907029167 (expected 3907029167)
+hdr_lba_start=34
+hdr_lba_end=3907029134
+hdr_lba_table=2
+hdr_entries=128
+hdr_entsz=128
+ 1 P MS Data                     2048  172031999  172029952
+     NTFS, blocksize=4096, 88 GB / 82 GiB
+
+Analyse Disk /dev/sdb - 2000 GB / 1863 GiB - CHS 243201 255 63
+hdr_size=92
+hdr_lba_self=1
+hdr_lba_alt=3907029167 (expected 3907029167)
+hdr_lba_start=34
+hdr_lba_end=3907029134
+hdr_lba_table=2
+hdr_entries=128
+hdr_entsz=128
+Current partition structure:
+ 1 P MS Data                     2048  172031999  172029952
+
+search_part()
+Disk /dev/sdb - 2000 GB / 1863 GiB - CHS 243201 255 63
+NTFS at 0/32/33
+filesystem size           172029952
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+NTFS part_offset=1048576, part_size=88079335424, sector_size=512
+NTFS partition cannot be added (part_offset<part_size).
+NTFS at 0/32/33
+filesystem size           172029952
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                     2048  172031999  172029952
+     NTFS, blocksize=4096, 88 GB / 82 GiB
+NTFS at 10708/126/43
+filesystem size           2048000000
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+NTFS part_offset=88080384000, part_size=1048576000000, sector_size=512
+NTFS partition cannot be added (part_offset<part_size).
+NTFS at 10708/126/43
+filesystem size           2048000000
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                172032000 2220031999 2048000000
+     NTFS, blocksize=4096, 1048 GB / 976 GiB
+NTFS at 138190/185/44
+filesystem size           1686990848
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data                533043201 2220034048 1686990848
+     NTFS found using backup sector, blocksize=4096, 863 GB / 804 GiB
+NTFS at 138190/185/44
+filesystem size           1686990848
+sectors_per_cluster       8
+mft_lcn                   786432
+mftmirr_lcn               2
+clusters_per_mft_record   -10
+clusters_per_index_record 1
+     MS Data               2220034048 3907024895 1686990848
+     NTFS, blocksize=4096, 863 GB / 804 GiB
+
+Results
+   P MS Data                     2048  172031999  172029952
+     NTFS, blocksize=4096, 88 GB / 82 GiB
+     MS Data                172032000 2220031999 2048000000
+     NTFS, blocksize=4096, 1048 GB / 976 GiB
+     MS Data                533043201 2220034048 1686990848
+     NTFS found using backup sector, blocksize=4096, 863 GB / 804 GiB
+     MS Data               2220034048 3907024895 1686990848
+     NTFS, blocksize=4096, 863 GB / 804 GiB
+
+Hint for advanced users. dmsetup may be used if you prefer to avoid to rewrite the partition table for the moment:
+echo "0 172029952 linear /dev/sdb 2048" | dmsetup create test0
+echo "0 2048000000 linear /dev/sdb 172032000" | dmsetup create test1
+echo "0 1686990848 linear /dev/sdb 533043201" | dmsetup create test2
+echo "0 1686990848 linear /dev/sdb 2220034048" | dmsetup create test3
+
+interface_write()
+ 1 P MS Data                     2048  172031999  172029952
+ 2 P MS Data                172032000 2220031999 2048000000
+ 3 P MS Data               2220034048 3907024895 1686990848
+write!
+No extended partition
+You will have to reboot for the change to take effect.
+
+TestDisk exited normally.
