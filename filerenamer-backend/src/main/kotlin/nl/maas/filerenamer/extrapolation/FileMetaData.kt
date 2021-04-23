@@ -19,6 +19,6 @@ data class FileMetaData(val file: File) {
     }
 
     fun hasPotentialSequenceFor(number: Int): Boolean {
-        return potentialSequenceNumbers?.contains(number)?:false
+        return potentialSequenceNumbers?.contains(number) ?: false
     }
 }

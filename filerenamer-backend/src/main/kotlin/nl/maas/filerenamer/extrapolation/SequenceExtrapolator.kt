@@ -1,5 +1,7 @@
 package nl.maas.filerenamer.extrapolation
 
+import nl.maas.filerenamer.domain.ExtrapolationResult
+
 interface SequenceExtrapolator {
 
 
@@ -31,6 +33,6 @@ interface SequenceExtrapolator {
         }
     }
 
-    fun findSequenceForFiles(fileData: List<FileMetaData>)
+    fun findSequenceForFiles(fileData: List<FileMetaData>):ExtrapolationResult
 
 }
