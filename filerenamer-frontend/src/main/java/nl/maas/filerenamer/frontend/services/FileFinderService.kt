@@ -1,4 +1,4 @@
-package nl.maas.filerenamer.frontend.wicket.services
+package nl.maas.filerenamer.frontend.services
 
 import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.extrapolation.NewNameExtrapolator

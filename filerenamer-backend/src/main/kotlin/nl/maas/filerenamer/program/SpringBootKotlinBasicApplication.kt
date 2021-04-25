@@ -18,23 +18,37 @@ class SpringBootKotlinBasicApplication
 fun main(args: Array<String>) {
 //    runApplication<SpringBootKotlinBasicApplication>(*args)
     var path = if (args.isEmpty()) requestPath() else args[0]
+    var dry = dryRun()
     val filesIn = FileHandler().searchFilesIn(path)
     var sequenceExtrapolator = requestSequenceExtrapolator()
     for (key in filesIn.keys) {
-        processFiles(filesIn, key, sequenceExtrapolator)
+        processFiles(filesIn, key, sequenceExtrapolator, dry)
     }
 }
 
-private fun processFiles(filesIn: Map<File, List<File>>, key: File, sequenceExtrapolator: SequenceExtrapolator) {
+private fun processFiles(
+    filesIn: Map<File, List<File>>,
+    key: File,
+    sequenceExtrapolator: SequenceExtrapolator,
+    dryRun: Boolean
+) {
     val fileData = filesIn.get(key)!!.map { file -> FileMetaData(file) }
     val sequenceForFiles = sequenceExtrapolator.findSequenceForFiles(fileData)
     processFailedSequences(sequenceForFiles)
     NewNameExtrapolator().determineNameForFiles(sequenceForFiles.files)
-    FileHandler().renameFiles(*fileData.filter { fileMetaData ->
-        !fileMetaData.newName.isNullOrBlank() && !fileMetaData.newName.equals(
-            fileMetaData.file.name
-        )
-    }.map { fileMetaData -> RenameOrder(fileMetaData.file, fileMetaData.newName!!) }.toTypedArray())
+    if (dryRun) {
+        fileData.filter { fileMetaData ->
+            !fileMetaData.newName.isNullOrBlank() && !fileMetaData.newName.equals(
+                fileMetaData.file.name
+            )
+        }.forEach { println("::${it.name} -> ${it.newName}") }
+    } else {
+        FileHandler().renameFiles(*fileData.filter { fileMetaData ->
+            !fileMetaData.newName.isNullOrBlank() && !fileMetaData.newName.equals(
+                fileMetaData.file.name
+            )
+        }.map { fileMetaData -> RenameOrder(fileMetaData.file, fileMetaData.newName!!) }.toTypedArray())
+    }
 }
 
 private fun processFailedSequences(result: ExtrapolationResult) {
@@ -73,4 +87,9 @@ private fun requestSequenceExtrapolator(): SequenceExtrapolator {
 private fun requestPath(): String {
     println("Path is required. Please provide a path: ")
     return readLine()!!
+}
+
+private fun dryRun(): Boolean {
+    println("Do you want a dry run? enter 'dry' in order to run dry: ")
+    return if ("dry".equals(readLine())) true else false
 }

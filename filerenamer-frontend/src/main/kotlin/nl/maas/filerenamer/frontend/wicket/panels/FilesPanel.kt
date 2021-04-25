@@ -1,7 +1,8 @@
 package nl.maas.filerenamer.frontend.wicket.panels
 
-import nl.maas.filerenamer.frontend.wicket.services.FileFinderService
 import nl.maas.filerenamer.extrapolation.FileMetaData
+import nl.maas.filerenamer.frontend.services.FileFinderService
+import org.apache.wicket.AttributeModifier
 import org.apache.wicket.markup.html.basic.Label
 import org.apache.wicket.markup.html.panel.Panel
 import org.apache.wicket.markup.repeater.RepeatingView
@@ -27,7 +28,14 @@ class FilesPanel : Panel {
     fun addMembers() {
         val folders = RepeatingView("folders")
         filesIn.keys.forEach { key ->
-            folders.add(Label(folders.newChildId(), key))
+            folders.add(
+                Label(folders.newChildId(), key.substringAfterLast("/")).add(
+                    AttributeModifier.replace(
+                        "class",
+                        "folderName"
+                    )
+                )
+            )
                 .add(createMemberPanels(folders.newChildId(), filesIn.get(key)!!))
         }
         add(folders)

@@ -11,15 +11,6 @@ class MemberPanel(id: String, val data: FileMetaData) : Panel(id) {
 
     init {
         this.add(Label("memberName", data.name))
-//        if (model.isFile){
-        add(TextField<String>("newMemberName"))
-        add(Label("folderMember", Model.of(data.dirName)))
-//        }
-//        if(model.isDirectory){
-//            val repeater = RepeatingView("folderMember")
-//            model.listFiles().forEach { file -> repeater.add(MemberPanel(repeater.newChildId(),Model.of(file))) }
-//            add(Label("newMemberName").setVisible(false))
-//            add(repeater)
-//        }
+        add(TextField<String>("newMemberName", Model.of(data.newName)))
     }
 }

@@ -12,6 +12,9 @@
     <properties>
         <wicketstuff-annotation.version>9.0.0</wicketstuff-annotation.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <wicket.version>9.0.0</wicket.version>
+        <wicket-bootstrap.version>5.0.4</wicket-bootstrap.version>
+        <wicket-bootstrap-less.version>4.0.4</wicket-bootstrap-less.version>
     </properties>
 
     <dependencies>
@@ -29,11 +32,13 @@
             <artifactId>wicketstuff-annotation</artifactId>
             <version>${wicketstuff-annotation.version}</version>
         </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-tomcat</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>2.1.8.RELEASE</version>
-            <scope>provided</scope>
+            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,9 +54,69 @@
             <artifactId>kotlin-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-request</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-util</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+
+        <!--        Bootstrap-->
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-core</artifactId>
+            <version>${wicket-bootstrap.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-extensions</artifactId>
+            <version>${wicket-bootstrap.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-less</artifactId>
+            <version>${wicket-bootstrap-less.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-themes</artifactId>
+            <version>${wicket-bootstrap.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
+        <!--        <sourceDirectory>src/main/javasrc/main/kotlin</sourceDirectory>-->
+        <!--        <sourceDirectory>src/main/kotlin</sourceDirectory>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -90,8 +155,8 @@
                         </goals>
                         <configuration>
                             <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                                <sourceDir>src/main/java</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
@@ -102,8 +167,8 @@
                         </goals>
                         <configuration>
                             <sourceDirs>
-                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                                <sourceDir>src/test/kotlin</sourceDir>
+                                <sourceDir>src/test/java</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
@@ -142,17 +207,36 @@
         </plugins>
         <resources>
             <resource>
+                <filtering>false</filtering>
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
-                <directory>src/main/java</directory>
+                <filtering>false</filtering>
+                <directory>src/main/resources/html</directory>
                 <includes>
-                    <include>**</include>
+                    <include>**/*.html</include>
                 </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
             </resource>
+            <!--            <resource>-->
+            <!--                <filtering>false</filtering>-->
+            <!--                <directory>src/main/java</directory>-->
+            <!--                <includes>-->
+            <!--                    <include>**</include>-->
+            <!--                </includes>-->
+            <!--                <excludes>-->
+            <!--                    <exclude>**/*.java</exclude>-->
+            <!--                </excludes>-->
+            <!--            </resource>-->
+            <!--            <resource>-->
+            <!--                <filtering>false</filtering>-->
+            <!--                <directory>src/main/kotlin</directory>-->
+            <!--                <includes>-->
+            <!--                    <include>**</include>-->
+            <!--                </includes>-->
+            <!--                <excludes>-->
+            <!--                    <exclude>**/*.kt</exclude>-->
+            <!--                </excludes>-->
+            <!--            </resource>-->
         </resources>
     </build>
 
