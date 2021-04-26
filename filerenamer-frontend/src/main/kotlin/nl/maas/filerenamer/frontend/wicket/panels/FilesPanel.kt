@@ -1,33 +1,22 @@
 package nl.maas.filerenamer.frontend.wicket.panels
 
 import nl.maas.filerenamer.extrapolation.FileMetaData
-import nl.maas.filerenamer.frontend.services.FileFinderService
+import nl.maas.filerenamer.frontend.wicket.objects.SearchResult
 import org.apache.wicket.AttributeModifier
 import org.apache.wicket.markup.html.basic.Label
 import org.apache.wicket.markup.html.panel.Panel
 import org.apache.wicket.markup.repeater.RepeatingView
-import javax.inject.Inject
+import org.apache.wicket.model.IModel
 
-class FilesPanel : Panel {
-    constructor(id: String) : super(id)
-
-    @Inject
-    lateinit var fileFinder: FileFinderService
-
-    lateinit var filesIn: Map<String, List<FileMetaData>>
-
+class FilesPanel(id: String, model: IModel<SearchResult>) : Panel(id, model) {
     init {
-        fetchFiles()
         addMembers()
-    }
-
-    fun fetchFiles() {
-        filesIn = fileFinder.findFilesToRename("/shares/anime")
     }
 
     fun addMembers() {
         val folders = RepeatingView("folders")
-        filesIn.keys.forEach { key ->
+        val fileData = (defaultModelObject as SearchResult).fileData
+        fileData.keys.forEach { key ->
             folders.add(
                 Label(folders.newChildId(), key.substringAfterLast("/")).add(
                     AttributeModifier.replace(
@@ -36,7 +25,7 @@ class FilesPanel : Panel {
                     )
                 )
             )
-                .add(createMemberPanels(folders.newChildId(), filesIn.get(key)!!))
+                .add(createMemberPanels(folders.newChildId(), fileData.get(key)!!))
         }
         add(folders)
     }

@@ -10,7 +10,7 @@ import java.io.File
 
 @Component
 open class FileFinderService {
-    fun findFilesToRename(path: String): Map<String, List<FileMetaData>> {
+    fun findFilesToRename(path: String): MutableMap<String, MutableList<FileMetaData>> {
         var filesIn = FileHandler().searchFilesIn(path)
         return processFiles(filesIn, SequenceNumberExtrapolator())
     }
@@ -18,14 +18,16 @@ open class FileFinderService {
     private fun processFiles(
         filesIn: Map<File, List<File>>,
         sequenceExtrapolator: SequenceExtrapolator
-    ): Map<String, List<FileMetaData>> {
-        var map: Map<String, List<FileMetaData>> =
-            filesIn.keys.map { key -> key.absolutePath to filesIn.get(key)!!.map { file -> FileMetaData(file) } }
+    ): MutableMap<String, MutableList<FileMetaData>> {
+        var map: Map<String, MutableList<FileMetaData>> =
+            filesIn.keys.map { key ->
+                key.absolutePath to filesIn.get(key)!!.map { file -> FileMetaData(file) }.toMutableList()
+            }
                 .toMap()
         map.keys.forEach { key -> sequenceExtrapolator.findSequenceForFiles(map.get(key)!!) }
         map.keys.forEach { key -> NewNameExtrapolator().determineNameForFiles(map.get(key)!!) }
         return map.filterKeys { key ->
             map.get(key)!!.any { data -> !data.newName.isNullOrBlank() && !data.newName.equals(data.file.name) }
-        }
+        }.toMutableMap()
     }
 }

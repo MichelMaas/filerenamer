@@ -1,8 +1,9 @@
 package nl.maas.filerenamer.extrapolation
 
 import java.io.File
+import java.io.Serializable
 
-data class FileMetaData(val file: File) {
+data class FileMetaData(val file: File) : Serializable {
 
     val delimiters: List<String> = listOf()
     lateinit var dirName: String
