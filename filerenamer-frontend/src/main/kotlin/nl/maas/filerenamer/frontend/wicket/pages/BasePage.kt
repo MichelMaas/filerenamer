@@ -6,6 +6,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarComponents
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.components.FilerenamerNavbarButton
 import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
+import nl.maas.filerenamer.frontend.wicket.panels.ModalPanel
 import org.apache.wicket.AttributeModifier
 import org.apache.wicket.markup.html.GenericWebPage
 import org.apache.wicket.model.Model
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 open class BasePage(parameters: PageParameters?) : GenericWebPage<Void?>(parameters) {
     lateinit var navbar: Navbar
+    lateinit var modalPanel: ModalPanel<*>
 
     @Inject
     lateinit var modelCache: ModelCache
@@ -45,10 +47,19 @@ open class BasePage(parameters: PageParameters?) : GenericWebPage<Void?>(paramet
             ?.map { it as FilerenamerNavbarButton }?.firstOrNull { type.equals(it.buttonType) }
     }
 
+
     init {
         add(newNavbar("navbar"))
+//        setModalPanel(ModalType.NONE, "")
         setOutputMarkupId(true)
     }
+
+//    override fun onBeforeRender() {
+//        super.onBeforeRender()
+//        if (!this::modalPanel.isInitialized) {
+//            throw IllegalStateException("No modalpanel added! Call #setModalPanel during initialization fase")
+//        }
+//    }
 
     fun isModelFilled(type: ButtonTypes): Boolean {
         var filled = when (type) {

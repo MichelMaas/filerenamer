@@ -2,11 +2,15 @@ package nl.maas.filerenamer.frontend.wicket.panels
 
 import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.frontend.wicket.objects.SearchResult
-import org.apache.wicket.AttributeModifier
+import org.apache.wicket.ajax.AjaxRequestTarget
+import org.apache.wicket.ajax.markup.html.AjaxLink
+import org.apache.wicket.markup.html.WebMarkupContainer
 import org.apache.wicket.markup.html.basic.Label
+import org.apache.wicket.markup.html.list.ListItem
+import org.apache.wicket.markup.html.list.ListView
 import org.apache.wicket.markup.html.panel.Panel
-import org.apache.wicket.markup.repeater.RepeatingView
 import org.apache.wicket.model.IModel
+
 
 class FilesPanel(id: String, model: IModel<SearchResult>) : Panel(id, model) {
     init {
@@ -14,25 +18,41 @@ class FilesPanel(id: String, model: IModel<SearchResult>) : Panel(id, model) {
     }
 
     fun addMembers() {
-        val folders = RepeatingView("folders")
         val fileData = (defaultModelObject as SearchResult).fileData
-        fileData.keys.forEach { key ->
-            folders.add(
-                Label(folders.newChildId(), key.substringAfterLast("/")).add(
-                    AttributeModifier.replace(
-                        "class",
-                        "folderName"
-                    )
-                )
-            )
-                .add(createMemberPanels(folders.newChildId(), fileData.get(key)!!))
-        }
+        val folders = FileMapView("folders", fileData)
         add(folders)
     }
 
-    fun createMemberPanels(id: String, files: List<FileMetaData>): RepeatingView {
-        val fileMembers = RepeatingView(id)
-        files.forEach { file -> fileMembers.add(MemberPanel(fileMembers.newChildId(), file)) }
-        return fileMembers
+
+    private inner class FileMapView(id: String, val fileData: MutableMap<String, MutableList<FileMetaData>>) :
+        ListView<String>(id, fileData.keys.toMutableList()) {
+
+        override fun populateItem(item: ListItem<String>) {
+            val key = item.modelObject
+
+            var hidingContainer = WebMarkupContainer("hidingContainer")
+            hidingContainer.add(FileMetaDataListView("members", fileData[key]!!)).setOutputMarkupPlaceholderTag(true)
+            hidingContainer.setVisible(false)
+            val detailLink: AjaxLink<Void> = object : AjaxLink<Void>("hidingButton") {
+                init {
+                    add(Label("folderTitle", key.substringAfterLast("/")))
+                }
+
+                override fun onClick(target: AjaxRequestTarget) {
+                    hidingContainer.setVisible(!hidingContainer.isVisible())
+                    target.add(hidingContainer)
+                }
+            }
+            item.add(detailLink)
+            item.add(hidingContainer)
+        }
+
+        private inner class FileMetaDataListView(id: String, data: MutableList<FileMetaData>) :
+            ListView<FileMetaData>(id, data) {
+            override fun populateItem(item: ListItem<FileMetaData>) {
+                item.add(MemberPanel("member", item.modelObject))
+            }
+
+        }
     }
 }
