@@ -1,54 +1,37 @@
 package nl.maas.filerenamer.frontend.wicket.panels
 
 import nl.maas.filerenamer.extrapolation.FileMetaData
+import nl.maas.filerenamer.frontend.wicket.components.DynamicFormComponent
 import org.apache.wicket.Component
 import org.apache.wicket.ajax.AjaxRequestTarget
-import org.apache.wicket.ajax.markup.html.AjaxLink
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink
-import org.apache.wicket.markup.html.form.DropDownChoice
-import org.apache.wicket.markup.html.form.Form
-import org.apache.wicket.markup.html.form.TextField
 import org.apache.wicket.markup.html.panel.Panel
+import org.apache.wicket.model.CompoundPropertyModel
 import org.apache.wicket.model.IComponentInheritedModel
-import org.apache.wicket.model.Model
 
 class FileDetailPanel(
     id: String,
-    model: IComponentInheritedModel<FileMetaData>, panelToHide: Component
+    val model: IComponentInheritedModel<FileMetaData>, val panelToHide: Component
 ) : Panel(id, model) {
-    init {
-        var form = Form<FileMetaData>("fileDetailForm", model)
-        form.add(
-            TextField<String>(
-                "dirName",
-                Model.of("${typedModelObject().dirName}: ${typedModelObject().sequence}")
-            )
-        )
-        form.add(TextField<String>("name"))
-        form.add(TextField<String>("newName"))
-        form.add(
-            DropDownChoice<String>(
-                "sequence",
-                typedModelObject().potentialSequenceNumbers?.map { it.toString() })
-        )
 
-        form.add(object : AjaxSubmitLink("submit", form) {
+    override fun onBeforeRender() {
+        super.onBeforeRender()
+        val form = object :
+            DynamicFormComponent<FileMetaData>("form", "${model.`object`.dirName}: ${model.`object`.sequence}", model) {
             override fun onAfterSubmit(target: AjaxRequestTarget) {
                 super.onAfterSubmit(target)
                 panelToHide.setVisible(false)
                 target.add(panelToHide.parent)
             }
-        })
 
-        form.add(object : AjaxLink<String>("cancel", Model.of("Cancel")) {
-            override fun onClick(target: AjaxRequestTarget) {
+            override fun onAfterCancel(target: AjaxRequestTarget) {
+                super.onAfterCancel(target)
                 panelToHide.setVisible(false)
                 target.add(panelToHide.parent)
             }
-
-        })
-        add(form)
+        }
+        form.addPlainText("name", "Name: ", CompoundPropertyModel.of(model.`object`.name))
+            .addSelect("sequence", "Sequence: ", model.`object`.potentialSequenceNumbers!!.map { it.toString() })
+            .addTextBox("newName", "New name: ")
+        addOrReplace(form)
     }
-
-    private fun typedModelObject(): FileMetaData = defaultModelObject as FileMetaData
 }

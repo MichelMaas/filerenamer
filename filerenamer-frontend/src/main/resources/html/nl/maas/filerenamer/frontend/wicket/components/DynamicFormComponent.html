@@ -6,7 +6,7 @@
 </head>
 <body>
 <wicket:panel>
-    <form wicket:id="flexibleForm">
+    <form wicket:id="dynamicForm">
         <div class="form-group">
             <h2>
                 <label class="form-control-plaintext" wicket:id="formTitle"/>
@@ -21,19 +21,23 @@
     <wicket:fragment wicket:id="textFragment">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" wicket:id="textLabel"></span>
+                <label class="input-group-text" wicket:id="textLabel"/>
             </div>
             <label wicket:id="text" class="form-control"/>
         </div>
     </wicket:fragment>
     <wicket:fragment wicket:id="selectFragment">
-        <label wicket:for="select">Select: </label>
-        <select class="form-control" wicket:id="select"/>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" wicket:id="selectLabel"/>
+            </div>
+            <select class="form-control" wicket:id="select"/>
+        </div>
     </wicket:fragment>
     <wicket:fragment wicket:id="textBoxFragment">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <label class="input-group-text" wicket:for="textBox">TextBox: </label>
+                <label class="input-group-text" wicket:id="textBoxLabel"/>
             </div>
             <input type="text" class="form-control" wicket:id="textBox">
         </div>
