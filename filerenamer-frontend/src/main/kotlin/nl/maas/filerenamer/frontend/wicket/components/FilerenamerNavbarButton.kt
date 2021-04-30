@@ -3,9 +3,7 @@ package nl.maas.filerenamer.frontend.wicket.components
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton
 import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
 import nl.maas.filerenamer.frontend.wicket.pages.BasePage
-import org.apache.wicket.model.IModel
 import org.apache.wicket.model.Model
-import java.io.Serializable
 
 class FilerenamerNavbarButton(val buttonType: ButtonTypes) :
     NavbarButton<Void>(buttonType.pageClass, Model.of(buttonType.name)) {
@@ -20,7 +18,7 @@ class FilerenamerNavbarButton(val buttonType: ButtonTypes) :
 
     override fun onBeforeRender() {
         super.onBeforeRender()
-        setEnabled(ButtonTypes.FIND.equals(buttonType) || findParent(BasePage::class.java).isModelFilled(buttonType))
+        setEnabled(ButtonTypes.FIND.equals(buttonType) || findParent(BasePage::class.java).isButtonActive(buttonType))
     }
 
     fun enable(): FilerenamerNavbarButton {

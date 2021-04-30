@@ -1,10 +1,38 @@
 package nl.maas.filerenamer.frontend.wicket.panels
 
+import nl.maas.filerenamer.frontend.wicket.components.FlexibleFormPanel
+import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.markup.html.panel.Panel
+import org.apache.wicket.model.CompoundPropertyModel
+import java.io.Serializable
 
 class TestPanel : Panel {
     constructor(id: String) : super(id)
 
-    init {
+    override fun onBeforeRender() {
+        super.onBeforeRender()
+        val model = CompoundPropertyModel.of(StringHolder("Test"))
+        val flexibleForm = object : FlexibleFormPanel<StringHolder>("content", "Test form", model) {
+            override fun onSubmit(target: AjaxRequestTarget) {
+                super.onSubmit(target)
+                println("Form submitting")
+            }
+
+            override fun onAfterSubmit(target: AjaxRequestTarget) {
+                super.onAfterSubmit(target)
+                println("Form submited")
+            }
+
+            override fun onBeforeCancel(target: AjaxRequestTarget) {
+                super.onBeforeCancel(target)
+                println("Form cancelling")
+            }
+        }
+        flexibleForm.addPlainText("string", "Stringholder: ", CompoundPropertyModel.of(model.`object`.string))
+            .addTextBox<String>("string", "String editor")
+        add(flexibleForm)
+    }
+
+    data class StringHolder(var string: String) : Serializable {
     }
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modal Panel</title>
+</head>
+<body>
+<wicket:panel>
+    <form wicket:id="flexibleForm">
+        <div class="form-group">
+            <h2>
+                <label class="form-control-plaintext" wicket:id="formTitle"/>
+            </h2>
+        </div>
+        <div class="form-group" wicket:id="fragments"/>
+        <div class="form-row">
+            <button type="submit" wicket:id="submit" class="btn btn-primary">Confirm</button>
+            <button type="button" wicket:id="reset" class="btn btn-primary">Reset</button>
+        </div>
+    </form>
+    <wicket:fragment wicket:id="textFragment">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" wicket:id="textLabel"></span>
+            </div>
+            <label wicket:id="text" class="form-control"/>
+        </div>
+    </wicket:fragment>
+    <wicket:fragment wicket:id="selectFragment">
+        <label wicket:for="select">Select: </label>
+        <select class="form-control" wicket:id="select"/>
+    </wicket:fragment>
+    <wicket:fragment wicket:id="textBoxFragment">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" wicket:for="textBox">TextBox: </label>
+            </div>
+            <input type="text" class="form-control" wicket:id="textBox">
+        </div>
+    </wicket:fragment>
+</wicket:panel>
+</body>
+</html>
