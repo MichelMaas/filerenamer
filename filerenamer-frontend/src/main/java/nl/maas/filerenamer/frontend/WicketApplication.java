@@ -1,5 +1,7 @@
 package nl.maas.filerenamer.frontend;
 
+import javafx.application.Application;
+import nl.maas.filerenamer.frontend.javafx.JavaFXApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
@@ -10,6 +12,7 @@ public class WicketApplication {
         new SpringApplicationBuilder()
                 .sources(WicketApplication.class)
                 .run(args);
+        Application.launch(JavaFXApplication.class);
     }
 
 }

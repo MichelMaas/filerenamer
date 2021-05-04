@@ -26,7 +26,7 @@ open class BasePage(parameters: PageParameters?) : GenericWebPage<Void?>(paramet
         navbar!!.add(
             AttributeModifier.replace(
                 "class",
-                "navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar"
+                "navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar sticky-top bg-dark"
             )
         )
         navbar!!.setBrandName(Model.of("Filerenamer"))
@@ -53,7 +53,8 @@ open class BasePage(parameters: PageParameters?) : GenericWebPage<Void?>(paramet
 
     fun isButtonActive(type: ButtonTypes): Boolean {
         var filled = when (type) {
-            ButtonTypes.FILES -> return !modelCache.searchResult.isEmpty()
+            ButtonTypes.FILES, ButtonTypes.CONFIRM -> return !modelCache.searchResult.isEmpty()
+            ButtonTypes.FAILURES -> return !modelCache.searchResult.isEmpty() && modelCache.searchResult.fileData.none { it.value.failures == null }
             ButtonTypes.TEST -> return true
             else -> false
         }

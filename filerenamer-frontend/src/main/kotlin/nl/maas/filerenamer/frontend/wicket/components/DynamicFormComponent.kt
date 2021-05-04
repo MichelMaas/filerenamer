@@ -84,8 +84,8 @@ open class DynamicFormComponent<T>(id: String, val formTitle: String, model: ICo
         Fragment("propertyName", "textBoxFragment", this) {
         override fun onBeforeRender() {
             super.onBeforeRender()
-            val m: M = readInstanceProperty(form.modelObject, propertyName)
-            addOrReplace(object : TextField<M>("textBox", CompoundPropertyModel.of(m)) {
+            val m = readInstanceProperty(form.modelObject, propertyName)
+            addOrReplace(object : TextField<String>("textBox", CompoundPropertyModel.of(m)) {
                 override fun onModelChanged() {
                     super.onModelChanged()
                     form.modelObject::class.declaredMemberProperties.filterIsInstance<KMutableProperty<*>>()
@@ -108,6 +108,8 @@ open class DynamicFormComponent<T>(id: String, val formTitle: String, model: ICo
             super.onBeforeRender()
             val m: Serializable = readInstanceProperty(form.modelObject, propertyName)
             addOrReplace(object : DropDownChoice<Serializable>("select", CompoundPropertyModel.of(m), options) {
+
+
                 override fun onModelChanged() {
                     super.onModelChanged()
                     form.modelObject::class.declaredMemberProperties.filterIsInstance<KMutableProperty<*>>()
@@ -158,11 +160,12 @@ open class DynamicFormComponent<T>(id: String, val formTitle: String, model: ICo
 
 
     @Suppress("UNCHECKED_CAST")
-    private fun <R : Serializable, I> readInstanceProperty(instance: I, propertyName: String): R {
+    private fun <I> readInstanceProperty(instance: I, propertyName: String): String {
         val property = instance!!::class.members
             // don't cast here to <Any, R>, it would succeed silently
             .first { it.name == propertyName } as KProperty1<Any, *>
         // force a invalid cast exception if incorrect type here
-        return property.get(instance) as R
+        val get = property.get(instance)
+        return if (get != null) get.toString() else "NONE"
     }
 }

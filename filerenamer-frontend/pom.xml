@@ -15,6 +15,7 @@
         <wicket.version>9.0.0</wicket.version>
         <wicket-bootstrap.version>5.0.4</wicket-bootstrap.version>
         <wicket-bootstrap-less.version>4.0.4</wicket-bootstrap-less.version>
+        <javafx.version>11</javafx.version>
     </properties>
 
     <dependencies>
@@ -112,6 +113,23 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -121,6 +139,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>false</fork>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -203,6 +224,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.1</version>
+                <configuration>
+                    <mainClass>HelloFX</mainClass>
+                </configuration>
             </plugin>
         </plugins>
         <resources>

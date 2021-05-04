@@ -12,14 +12,15 @@ import org.apache.wicket.markup.html.panel.Panel
 import org.apache.wicket.model.IModel
 
 
-class FilesPanel(id: String, model: IModel<SearchResult>) : Panel(id, model) {
+class FolderPanel(id: String, model: IModel<SearchResult>) : Panel(id, model) {
     init {
         addMembers()
     }
 
     fun addMembers() {
         val fileData = (defaultModelObject as SearchResult).fileData
-        val folders = FileMapView("folders", fileData)
+        val folders =
+            FileMapView("folders", fileData.map { it.key to it.value.files.toMutableList() }.toMap().toMutableMap())
         add(folders)
     }
 
@@ -31,7 +32,7 @@ class FilesPanel(id: String, model: IModel<SearchResult>) : Panel(id, model) {
             val key = item.modelObject
 
             var hidingContainer = WebMarkupContainer("hidingContainer")
-            hidingContainer.add(FileMetaDataListView("members", fileData[key]!!)).setOutputMarkupPlaceholderTag(true)
+            hidingContainer.add(FileMetaDataListView("folders", fileData[key]!!)).setOutputMarkupPlaceholderTag(true)
             hidingContainer.setVisible(false)
             val detailLink: AjaxLink<Void> = object : AjaxLink<Void>("hidingButton") {
                 init {
@@ -50,7 +51,7 @@ class FilesPanel(id: String, model: IModel<SearchResult>) : Panel(id, model) {
         private inner class FileMetaDataListView(id: String, data: MutableList<FileMetaData>) :
             ListView<FileMetaData>(id, data) {
             override fun populateItem(item: ListItem<FileMetaData>) {
-                item.add(MemberPanel("member", item.modelObject))
+                item.add(MemberPanel("folder", item.modelObject))
             }
 
         }

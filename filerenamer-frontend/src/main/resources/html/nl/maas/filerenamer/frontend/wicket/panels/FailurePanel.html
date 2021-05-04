@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org"
+      xml:lang="en"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<wicket:panel>
+    <button class="btn btn-secundary btn-sm btn-block" wicket:id="button">
+        <div>
+            <label wicket:id="type"/> <span>-></span>
+            <label wicket:id="folder"/>
+        </div>
+    </button>
+    <div wicket:id="panelToHide" class="jumbotron">
+        <wicket:container wicket:id="modalPanel"/>
+    </div>
+</wicket:panel>
+</body>
+</html>

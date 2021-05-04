@@ -1,5 +1,6 @@
 package nl.maas.filerenamer.frontend.wicket.panels
 
+import nl.maas.filerenamer.extrapolation.SequenceExtrapolator.Companion.SEQUENCE
 import nl.maas.filerenamer.frontend.services.FileFinderService
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.objects.SearchCriteria
@@ -30,14 +31,14 @@ class SearchPanel : Panel {
         val form = SearchForm("searchForm", CompoundPropertyModel.of(typedModel()))
         form.add(TextField<String>("path"))
         val select =
-            DropDownChoice<SearchCriteria.SequenceType>("sequenceType", SearchCriteria.SequenceType.values().asList())
+            DropDownChoice<SEQUENCE>("sequenceType", SEQUENCE.values().asList())
         form.add(select)
 //        add(Submit(form))
         addOrReplace(form)
     }
 
     fun findFiles(): SearchResult {
-        val foundFiles = fileFinderService.findFilesToRename(typedModel().`object`.path)
+        val foundFiles = fileFinderService.findFilesToRename(typedModel().`object`)
         var searchResult = SearchResult(typedModel().`object`.sequenceType, foundFiles)
         return searchResult
     }
