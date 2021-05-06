@@ -47,7 +47,7 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
                     println(message)
                     var extrapolationFailure =
                         ExtrapolationFailure(ExtrapolationFailures.FailureType.TooMany, nr, options!!)
-                    extrapolationFailures.add(sequenceMap[0]!![0].dirName, extrapolationFailure)
+                    extrapolationFailures.add(sequenceMap[min]!![0].dirName, extrapolationFailure)
                 }
             }
         }
@@ -58,7 +58,9 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
     }
 
     private fun determineSequenceNumbers(fileData: List<FileMetaData>, edgeNumber: String): Int {
-        var numbers = fileData.flatMap { fileMetaData -> fileMetaData.potentialSequenceNumbers ?: listOf() }
+        var numbers = fileData.flatMap { fileMetaData ->
+            fileMetaData.potentialSequenceNumbers.map { it.toIntOrNull() }.filterNotNull()
+        }
         val lowest = numbers.sorted().get(0)
         val lastValid = numbers.sorted()
             .reduceIndexed { index, previous, current -> if (current - previous > 10) previous else current }
@@ -72,8 +74,8 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
         val files = result.files
         files.forEach { fileData ->
             fileData.potentialSequenceNumbers =
-                fileData.extrapolatedName.map { s -> if (s.toIntOrNull() != null) s.toInt() else null }.filterNotNull()
-            if (fileData.potentialSequenceNumbers?.isEmpty() ?: true) {
+                fileData.extrapolatedName.map { it.toIntOrNull() }.filterNotNull().map { it.toString() }.toMutableSet()
+            if (fileData.potentialSequenceNumbers.isEmpty()) {
 //                print("No sequence number found for ${fileData.name}. Please provide the sequencenumber for this file or (s)kip: ")
 //                fileData.potentialSequenceNumbers = listOf(readLine()!!.toIntOrNull()).filterNotNull()
                 result.failures.add(

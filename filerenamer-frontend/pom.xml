@@ -10,7 +10,7 @@
     <artifactId>filerenamer-frontend</artifactId>
 
     <properties>
-        <wicketstuff-annotation.version>9.0.0</wicketstuff-annotation.version>
+        <wicketstuff.version>9.0.0</wicketstuff.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <wicket.version>9.0.0</wicket.version>
         <wicket-bootstrap.version>5.0.4</wicket-bootstrap.version>
@@ -31,8 +31,15 @@
         <dependency>
             <groupId>org.wicketstuff</groupId>
             <artifactId>wicketstuff-annotation</artifactId>
-            <version>${wicketstuff-annotation.version}</version>
+            <version>${wicketstuff.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.wicketstuff/wicketstuff-progressbar -->
+        <dependency>
+            <groupId>org.wicketstuff</groupId>
+            <artifactId>wicketstuff-progressbar</artifactId>
+            <version>${wicketstuff.version}</version>
+        </dependency>
+
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.boot</groupId>-->
         <!--            <artifactId>spring-boot-starter-tomcat</artifactId>-->
@@ -141,6 +148,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <fork>false</fork>
+                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>

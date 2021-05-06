@@ -8,7 +8,7 @@ data class FileMetaData(val file: File) : Serializable {
     val delimiters: List<String> = listOf()
     lateinit var dirName: String
     lateinit var name: String
-    var potentialSequenceNumbers: List<Int>? = null
+    var potentialSequenceNumbers = emptySet<String>().toMutableSet()
     var sequence: String? = null
     var newName: String? = null
     lateinit var extrapolatedName: List<String>
@@ -20,6 +20,6 @@ data class FileMetaData(val file: File) : Serializable {
     }
 
     fun hasPotentialSequenceFor(number: Int): Boolean {
-        return potentialSequenceNumbers?.contains(number) ?: false
+        return potentialSequenceNumbers.map { it.toIntOrNull() }.filterNotNull().contains(number)
     }
 }

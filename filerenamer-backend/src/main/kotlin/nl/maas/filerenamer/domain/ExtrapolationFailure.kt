@@ -2,7 +2,19 @@ package nl.maas.filerenamer.domain
 
 import nl.maas.filerenamer.domain.ExtrapolationFailures.FailureType
 import nl.maas.filerenamer.extrapolation.FileMetaData
+import java.io.Serializable
 
-class ExtrapolationFailure<T : Comparable<T>>(val type: FailureType, val sequence: T, val failed: List<FileMetaData>) {
-    constructor(type: FailureType, sequence: T, vararg failed: FileMetaData) : this(type, sequence, failed.asList())
+class ExtrapolationFailure<T : Serializable>(val type: FailureType, val sequence: T, val failed: List<FileMetaData>) :
+    Serializable {
+    constructor(type: FailureType, folder: String, sequence: T, vararg failed: FileMetaData) : this(
+        type,
+        sequence,
+        failed.asList()
+    )
+
+    init {
+        if (FailureType.TooMany.equals(type)) {
+            failed.forEach { it.potentialSequenceNumbers.add("NONE") }
+        }
+    }
 }

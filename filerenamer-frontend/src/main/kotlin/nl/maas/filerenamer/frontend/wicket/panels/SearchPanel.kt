@@ -45,6 +45,7 @@ class SearchPanel : Panel {
 
     fun typedModel() = defaultModel as IModel<SearchCriteria>
 
+
     private inner class SearchForm(id: String, model: IModel<SearchCriteria>) : Form<SearchCriteria>(id, model) {
 
         override fun onInitialize() {

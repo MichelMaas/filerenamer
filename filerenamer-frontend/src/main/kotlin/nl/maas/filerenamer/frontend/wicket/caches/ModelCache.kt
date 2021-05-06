@@ -4,6 +4,8 @@ import nl.maas.filerenamer.extrapolation.SequenceExtrapolator
 import nl.maas.filerenamer.frontend.wicket.objects.SearchCriteria
 import nl.maas.filerenamer.frontend.wicket.objects.SearchResult
 import org.springframework.stereotype.Component
+import java.io.File
+import java.nio.file.Files
 
 @Component
 class ModelCache {
