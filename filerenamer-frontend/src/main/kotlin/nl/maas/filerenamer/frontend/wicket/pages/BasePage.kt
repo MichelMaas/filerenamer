@@ -23,12 +23,7 @@ open class BasePage(parameters: PageParameters?) : GenericWebPage<Void?>(paramet
     protected fun newNavbar(markupId: String?): Navbar {
         navbar = Navbar(markupId)
         navbar!!.position = Navbar.Position.TOP
-        navbar!!.add(
-            AttributeModifier.replace(
-                "class",
-                "navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar sticky-top bg-dark"
-            )
-        )
+        navbar!!.add(NavbarProvider())
         navbar!!.setBrandName(Model.of("Filerenamer"))
         val navbarButtons: Array<NavbarButton<*>> = Arrays.stream(ButtonTypes.values()).map { button: ButtonTypes? ->
             FilerenamerNavbarButton(
@@ -60,4 +55,12 @@ open class BasePage(parameters: PageParameters?) : GenericWebPage<Void?>(paramet
         }
         return filled
     }
+
+    private inner class NavbarProvider:AttributeModifier(
+    "class",
+    "navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar sticky-top bg-dark"){
+        val childClass=AttributeModifier("class","nav-item")
+    }
+
+    private inner class NavtabsProvider:AttributeModifier("class","nav nav-tabs nav-tabs-dark")
 }

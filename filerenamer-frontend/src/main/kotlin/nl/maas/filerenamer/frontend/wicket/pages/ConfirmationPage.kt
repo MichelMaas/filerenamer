@@ -1,6 +1,7 @@
 package nl.maas.filerenamer.frontend.wicket.pages
 
 import nl.maas.filerenamer.frontend.services.FileFinderService
+import nl.maas.filerenamer.frontend.wicket.objects.SearchResult
 import org.apache.wicket.AttributeModifier
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.ajax.markup.html.AjaxLink
@@ -29,8 +30,13 @@ class ConfirmationPage(parameters: PageParameters) : BasePage(parameters) {
             )
         }
         val footer = WebMarkupContainer("footerbar").add(object : AjaxLink<String>("confirm", Model.of("Confirm")) {
-            override fun onClick(target: AjaxRequestTarget?) {
+            override fun onClick(target: AjaxRequestTarget) {
                 fileFinderService.commitChanges(searchResult.fileData.values.flatMap { it.files })
+                modelCache.searchResult = SearchResult(
+                    modelCache.searchCriteria.sequenceType,
+                    fileFinderService.findFilesToRename(modelCache.searchCriteria)
+                )
+                target.add(this@ConfirmationPage)
             }
         }).add(
             AttributeModifier.replace(
@@ -38,6 +44,6 @@ class ConfirmationPage(parameters: PageParameters) : BasePage(parameters) {
                 "navbar  navbar-dark  bd-navbar sticky-bottom bg-dark justify-content-center"
             )
         )
-        add(changes, footer)
+        addOrReplace(changes, footer)
     }
 }

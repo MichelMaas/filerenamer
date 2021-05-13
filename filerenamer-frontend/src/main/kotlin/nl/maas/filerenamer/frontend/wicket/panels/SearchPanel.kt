@@ -15,6 +15,9 @@ import org.apache.wicket.markup.html.form.TextField
 import org.apache.wicket.markup.html.panel.Panel
 import org.apache.wicket.model.CompoundPropertyModel
 import org.apache.wicket.model.IModel
+import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
 import javax.inject.Inject
 
 class SearchPanel : Panel {
@@ -57,6 +60,7 @@ class SearchPanel : Panel {
             AjaxFormSubmitBehavior(this, "submit") {
             override fun onSubmit(target: AjaxRequestTarget) {
                 super.onSubmit(target)
+                Paths.get((defaultModelObject as SearchCriteria).path).toFile().exists()
                 println(defaultModel.`object`.toString())
                 val searchPage = findParent(SearchPage::class.java)
                 modelCache.searchResult = this@SearchPanel.findFiles()

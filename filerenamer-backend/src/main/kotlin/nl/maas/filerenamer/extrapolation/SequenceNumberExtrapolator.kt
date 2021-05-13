@@ -10,17 +10,31 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
     override fun findSequenceForFiles(fileData: List<FileMetaData>): ExtrapolationResult {
         val result = ExtrapolationResult(fileData)
         fileData.forEach { fileMetaData -> determineSequencePositions(result) }
-        return determineSequence(result)
+        determineSequence(result)
+        return prepareErrors(result)
+    }
+
+    private fun prepareErrors(result: ExtrapolationResult): ExtrapolationResult {
+        result.failures.failures.forEach {
+            it.value.filter { ExtrapolationFailures.FailureType.NoNumberForFile.equals(it.type) }.forEach {
+                it.failed.forEach { failed ->
+                    failed.potentialSequenceNumbers =
+                        (result.min..result.max).toList().map { it.toString() }.toMutableSet()
+                    failed.potentialSequenceNumbers.add("NONE")
+                }
+            }
+        }
+        return result
     }
 
     private fun determineSequence(result: ExtrapolationResult): ExtrapolationResult {
         val fileData = result.files
-        val min = determineSequenceNumbers(fileData, "MIN")
-        val max = determineSequenceNumbers(fileData, "MAX")
+        result.min = determineSequenceNumbers(fileData, "MIN")
+        result.max = determineSequenceNumbers(fileData, "MAX")
         val sequenceMap = HashMap<Int, List<FileMetaData>>()
         var extrapolationFailures = ExtrapolationFailures();
         val warnings = ArrayList<Warning>();
-        for (i in min..max) {
+        for (i in result.min..result.max) {
             val list = fileData.filter { fileMetaData -> fileMetaData.hasPotentialSequenceFor(i) }
             sequenceMap.put(i, list)
         }
@@ -30,10 +44,10 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
             for (nr in failedToDetermine) {
                 val options = sequenceMap[nr]
                 if (options?.isEmpty() ?: true) {
-                    if (nr >= min && nr <= max) {
+                    if (nr >= result.min && nr <= result.max) {
                         val message =
                             "Er is geen geldige optie gevonden voor volgnummer ${nr}. Dit nummer wordt genegeerd"
-                        sequenceMap[min]?.let { opt ->
+                        sequenceMap[result.min]?.let { opt ->
                             opt[0]?.let {
                                 warnings.add(Warning(it.dirName, message))
                             }
@@ -47,7 +61,7 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
                     println(message)
                     var extrapolationFailure =
                         ExtrapolationFailure(ExtrapolationFailures.FailureType.TooMany, nr, options!!)
-                    extrapolationFailures.add(sequenceMap[min]!![0].dirName, extrapolationFailure)
+                    extrapolationFailures.add(sequenceMap[result.min]!![0].dirName, extrapolationFailure)
                 }
             }
         }
@@ -80,7 +94,12 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
 //                fileData.potentialSequenceNumbers = listOf(readLine()!!.toIntOrNull()).filterNotNull()
                 result.failures.add(
                     fileData.dirName,
-                    ExtrapolationFailure(ExtrapolationFailures.FailureType.NoNumberForFile, "", fileData)
+                    ExtrapolationFailure(
+                        ExtrapolationFailures.FailureType.NoNumberForFile,
+                        fileData.dirName,
+                        0,
+                        fileData
+                    )
                 )
             }
         }

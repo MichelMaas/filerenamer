@@ -10,6 +10,10 @@ data class ExtrapolationResult(
 ) : Serializable {
     constructor(files: List<FileMetaData>) : this(files, ArrayList(), ExtrapolationFailures(HashMap()))
 
+
+    var min = 0
+    var max = 0
+
     fun addWarnings(vararg warnings: Warning) {
         val list = ArrayList(this.warnings)
         list.addAll(warnings)
