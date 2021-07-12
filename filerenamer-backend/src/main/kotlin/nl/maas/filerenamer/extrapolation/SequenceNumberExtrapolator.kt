@@ -29,8 +29,8 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
 
     private fun determineSequence(result: ExtrapolationResult): ExtrapolationResult {
         val fileData = result.files
-        result.min = determineSequenceNumbers(fileData, "MIN")
-        result.max = determineSequenceNumbers(fileData, "MAX")
+        result.min = determineSequenceNumbers(fileData, "MIN", result)
+        result.max = determineSequenceNumbers(fileData, "MAX", result)
         val sequenceMap = HashMap<Int, List<FileMetaData>>()
         var extrapolationFailures = ExtrapolationFailures();
         val warnings = ArrayList<Warning>();
@@ -48,8 +48,10 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
                         val message =
                             "Er is geen geldige optie gevonden voor volgnummer ${nr}. Dit nummer wordt genegeerd"
                         sequenceMap[result.min]?.let { opt ->
-                            opt[0]?.let {
-                                warnings.add(Warning(it.dirName, message))
+                            if (opt.isNotEmpty()) {
+                                opt[0]?.let {
+                                    warnings.add(Warning(it.dirName, message))
+                                }
                             }
                         }
                         println(message)
@@ -71,13 +73,39 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
         return result
     }
 
-    private fun determineSequenceNumbers(fileData: List<FileMetaData>, edgeNumber: String): Int {
+    private fun determineSequenceNumbers(
+        fileData: List<FileMetaData>,
+        edgeNumber: String,
+        result: ExtrapolationResult
+    ): Int {
         var numbers = fileData.flatMap { fileMetaData ->
             fileMetaData.potentialSequenceNumbers.map { it.toIntOrNull() }.filterNotNull()
         }
-        val lowest = numbers.sorted().get(0)
-        val lastValid = numbers.sorted()
+        var empty = false
+        if (numbers.isNullOrEmpty()) {
+            result.failures.add(
+                fileData[0].dirName,
+                ExtrapolationFailure(ExtrapolationFailures.FailureType.None, 0, fileData)
+            )
+            empty = true
+        }
+        var lowest = if (empty) 0 else numbers.sorted().get(0)
+        var lastValid = if (empty) fileData.size else numbers.sorted()
             .reduceIndexed { index, previous, current -> if (current - previous > 10) previous else current }
+
+        if (lastValid.equals(lowest) || (lastValid - lowest > fileData.size && fileData.none {
+                it.potentialSequenceNumbers.contains(
+                    lastValid.toString()
+                )
+            })) {
+            result.failures.add(
+                fileData[0].dirName,
+                ExtrapolationFailure(ExtrapolationFailures.FailureType.None, 0, fileData)
+            )
+            lowest = 0;
+            lastValid = fileData.size
+            fileData.forEach { it.potentialSequenceNumbers = (lowest..lastValid).map { it.toString() }.toMutableSet() }
+        }
         val range = lowest..lastValid
         val notPresent = range.filterNot { nr -> numbers.contains(nr) }
 
