@@ -18,7 +18,7 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
         result.failures.failures.forEach {
             it.value.filter { ExtrapolationFailures.FailureType.NoNumberForFile.equals(it.type) }.forEach {
                 it.failed.forEach { failed ->
-                    failed.potentialSequenceNumbers =
+                     failed.potentialSequenceNumbers =
                         (result.min..result.max).toList().map { it.toString() }.toMutableSet()
                     failed.potentialSequenceNumbers.add("NONE")
                 }
@@ -62,7 +62,7 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
                         "Het bepalen van een bestand voor volgnummer ${nr}."
                     println(message)
                     var extrapolationFailure =
-                        ExtrapolationFailure(ExtrapolationFailures.FailureType.TooMany, nr, options!!)
+                        ExtrapolationFailure(ExtrapolationFailures.FailureType.TooMany, nr, options!!.toMutableList())
                     extrapolationFailures.add(sequenceMap[result.min]!![0].dirName, extrapolationFailure)
                 }
             }
@@ -85,7 +85,7 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
         if (numbers.isNullOrEmpty()) {
             result.failures.add(
                 fileData[0].dirName,
-                ExtrapolationFailure(ExtrapolationFailures.FailureType.None, 0, fileData)
+                ExtrapolationFailure(ExtrapolationFailures.FailureType.None, 0, fileData.toMutableList())
             )
             empty = true
         }
@@ -100,7 +100,7 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
             })) {
             result.failures.add(
                 fileData[0].dirName,
-                ExtrapolationFailure(ExtrapolationFailures.FailureType.None, 0, fileData)
+                ExtrapolationFailure(ExtrapolationFailures.FailureType.None, 0, fileData.toMutableList())
             )
             lowest = 0;
             lastValid = fileData.size

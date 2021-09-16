@@ -53,17 +53,17 @@ private fun processFiles(
 
 private fun processFailedSequences(result: ExtrapolationResult) {
     val options = result.failures.getTypedFailures<Int>()
-    options.keys.filter { key -> FailureType.TooMany.equals(options[key]!![0].type) }
+    options.keys.filter { key -> FailureType.TooMany.equals(options[key]!!.toTypedArray()[0].type) }
         .forEach { key -> requestManualSequence(options[key]!!) }
-    options.keys.filter { key -> FailureType.None.equals(options[key]!![0].type) }
+    options.keys.filter { key -> FailureType.None.equals(options[key]!!.toTypedArray()[0].type) }
         .forEach { key -> warnNotFound(key, options[key]!!) }
 }
 
-fun warnNotFound(folder: String, failures: List<ExtrapolationFailure<Int>>) {
+fun warnNotFound(folder: String, failures: Set<ExtrapolationFailure<Int>>) {
     failures.forEach { failure -> println("Voor map ${folder} is volgnummer ${failure.sequence} niet gevonden.") }
 }
 
-fun requestManualSequence(failures: List<ExtrapolationFailure<Int>>) {
+fun requestManualSequence(failures: Set<ExtrapolationFailure<Int>>) {
 
     failures.forEach {
         val nr = it.sequence

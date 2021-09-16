@@ -18,13 +18,25 @@ class NewNameExtrapolator {
     }
 
     private fun determineName(fileMetaData: FileMetaData): String {
-        if ("NONE".equals(fileMetaData.sequence)) {
-            return "${fileMetaData.name}.${fileMetaData.file.extension}";
-        }
+
         val fillerLength = numberOfFiles.toString().length
-        var name = "${fileMetaData.dirName} - ${
-            (fileMetaData.sequence ?: 0).toString().padStart(fillerLength, '0')
-        }.${fileMetaData.file.extension}"
-        return name
+        var name = if ("NONE".equals(fileMetaData.sequence)) {
+            "${fileMetaData.name}.${fileMetaData.file.extension}"
+        } else {
+            "${fileMetaData.dirName} - ${
+                (fileMetaData.sequence ?: 0).toString().padStart(fillerLength, '0')
+            }.${fileMetaData.file.extension}"
+        }
+        if (wasManuallyAltered(fileMetaData, name)) {
+            return fileMetaData.newName!!
+        } else {
+            return name
+        }
+    }
+
+    private fun wasManuallyAltered(fileMetaData: FileMetaData, determinedNewName: String): Boolean {
+        return !fileMetaData.newName.isNullOrEmpty() && (fileMetaData.sequence.isNullOrEmpty() && !fileMetaData.newName.equals(
+            determinedNewName
+        ))
     }
 }

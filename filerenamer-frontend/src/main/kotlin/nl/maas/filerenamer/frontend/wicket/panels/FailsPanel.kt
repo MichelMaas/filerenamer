@@ -33,7 +33,7 @@ class FailsPanel(id: String, val model: IComponentInheritedModel<ExtrapolationFa
 
     private inner class FolderMapView(
         id: String,
-        val fileData: MutableMap<String, MutableList<ExtrapolationFailure<out Serializable>>>
+        val fileData: MutableMap<String, MutableSet<ExtrapolationFailure<out Serializable>>>
     ) :
         ListView<String>(id, fileData.keys.toMutableList()) {
 
@@ -41,7 +41,8 @@ class FailsPanel(id: String, val model: IComponentInheritedModel<ExtrapolationFa
             val key = item.modelObject
 
             var hidingContainer = WebMarkupContainer("hidingContainer")
-            hidingContainer.add(FailureListView("failures", fileData[key]!!)).setOutputMarkupPlaceholderTag(true)
+            hidingContainer.add(FailureListView("failures", fileData[key]!!.toMutableList()))
+                .setOutputMarkupPlaceholderTag(true)
             hidingContainer.setVisible(false)
             val detailLink: AjaxLink<Void> = object : AjaxLink<Void>("hidingButton") {
                 init {
