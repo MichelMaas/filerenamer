@@ -15,15 +15,7 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
     }
 
     private fun prepareErrors(result: ExtrapolationResult): ExtrapolationResult {
-        result.failures.failures.forEach {
-            it.value.filter { ExtrapolationFailures.FailureType.NoNumberForFile.equals(it.type) }.forEach {
-                it.failed.forEach { failed ->
-                     failed.potentialSequenceNumbers =
-                        (result.min..result.max).toList().map { it.toString() }.toMutableSet()
-                    failed.potentialSequenceNumbers.add("NONE")
-                }
-            }
-        }
+        result.files.forEach { it.potentialSequenceNumbers.add("NONE") }
         return result
     }
 

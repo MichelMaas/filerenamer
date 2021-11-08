@@ -12,7 +12,7 @@ public class WicketApplication {
         new SpringApplicationBuilder()
                 .sources(WicketApplication.class)
                 .run(args);
-        Application.launch(JavaFXApplication.class);
+//        Application.launch(JavaFXApplication.class);
     }
 
 }
