@@ -1,5 +1,6 @@
 package nl.maas.filerenamer.frontend
 
+import nl.maas.filerenamer.io.FileUtils
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.edge.EdgeDriver
@@ -11,6 +12,8 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
 import java.io.IOException
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,7 +32,7 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
         try {
             if (os.indexOf("win") >= 0) {
                 startWinBrowser(url)
-            } else if (os.indexOf("webdrivers/mac") >= 0) {
+            } else if (os.indexOf("lib/mac") >= 0) {
                 startMacBrowser("url")
             } else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
                 startNixBrowser(url)
@@ -41,35 +44,24 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
 
     @Throws(IOException::class)
     private fun startNixBrowser(url: String) {
-        val file =
-            this::class.java.getResource("/webdrivers/linux/msedgedriver").file.replace(
-                "target/classes",
-                "src/main/resources"
-            )
-        System.setProperty("webdriver.edge.driver", file)
+        System.setProperty("webdriver.edge.driver", "${findWebDrivers(Paths.get("/linux/msedgedriver"))}")
         startWebDriver(url)
     }
 
     @Throws(IOException::class)
     private fun startMacBrowser(url: String) {
-        val file =
-            WicketApplication::class.java.getResource("/webdrivers/mac/msedgedriver").file.replace(
-                "target/classes",
-                "src/main/resources"
-            )
-        System.setProperty("webdriver.edge.driver", file)
+        System.setProperty("webdriver.edge.driver", "${findWebDrivers(Paths.get("/mac/msedgedriver"))}")
         startWebDriver(url)
     }
 
     @Throws(IOException::class)
     private fun startWinBrowser(url: String) {
-        val file =
-            WicketApplication::class.java.getResource("/webdrivers/windows/msedgedriver.exe").file.replace(
-                "target/classes",
-                "src/main/resources"
-            )
-        System.setProperty("webdriver.edge.driver", file)
+        System.setProperty("webdriver.edge.driver", "${findWebDrivers(Paths.get("/windows/msedgedriver.exe"))}")
         startWebDriver(url)
+    }
+
+    private fun findWebDrivers(path: Path): String {
+        return FileUtils.findFile(path.toString())
     }
 
     private fun startWebDriver(url: String) {

@@ -1,6 +1,7 @@
 package nl.maas.filerenamer.frontend.services
 
 import nl.maas.filerenamer.domain.ExtrapolationResult
+import nl.maas.filerenamer.events.TestEvent
 import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.extrapolation.NewNameExtrapolator
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator
@@ -10,6 +11,7 @@ import nl.maas.filerenamer.io.FileHandler
 import nl.maas.filerenamer.io.RenameOrder
 import org.springframework.stereotype.Component
 import java.io.File
+import javax.enterprise.event.Observes
 
 @Component
 open class FileFinderService {
@@ -53,5 +55,9 @@ open class FileFinderService {
         val fileHandler = FileHandler()
         files.filterNot { it.newName.isNullOrEmpty() }.map { RenameOrder(it.file, it.newName!!) }
             .forEach { fileHandler.renameFiles(it) }
+    }
+
+    fun handleTestEvent(@Observes event:TestEvent){
+        println(event.test)
     }
 }

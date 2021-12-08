@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>nl.maas.filerenamer</groupId>
     <parent>
         <groupId>nl.maas.filerenamer</groupId>
         <artifactId>filerenamer</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <groupId>nl.maas.filerenamer</groupId>
     <artifactId>filerenamer-frontend</artifactId>
 
     <properties>
@@ -80,6 +80,14 @@
             <version>${wicket.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.wicket/wicket-cdi -->
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-cdi</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -144,11 +152,17 @@
             <artifactId>selenium-java</artifactId>
             <version>4.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
         <!--        <sourceDirectory>src/main/javasrc/main/kotlin</sourceDirectory>-->
         <!--        <sourceDirectory>src/main/kotlin</sourceDirectory>-->
+        <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

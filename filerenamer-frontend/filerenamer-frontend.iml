@@ -68,6 +68,7 @@
     <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-reflect:1.5.0-RC" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:2.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.1.8.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
     <orderEntry type="library" name="Maven: com.giffing.wicket.spring.boot.starter:wicket-spring-boot-starter:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: com.giffing.wicket.spring.boot.starter:wicket-spring-boot-context:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.1.9.RELEASE" level="project" />
@@ -80,7 +81,6 @@
     <orderEntry type="library" name="Maven: org.apache.wicket:wicket-auth-roles:9.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.wicket:wicket-ioc:9.0.0" level="project" />
     <orderEntry type="library" name="Maven: cglib:cglib-nodep:3.3.0" level="project" />
-    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-util:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-tree:8.0.1" level="project" />
@@ -162,6 +162,7 @@
     <orderEntry type="library" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.junit.platform:junit-platform-commons:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.junit.jupiter:junit-jupiter-api:5.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.wicket:wicket-cdi:9.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-configuration-processor:2.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: de.agilecoders.wicket:wicket-bootstrap-core:5.0.4" level="project" />
     <orderEntry type="library" name="Maven: de.agilecoders.wicket:jquery-selectors:3.0.3" level="project" />
@@ -171,7 +172,6 @@
     <orderEntry type="library" name="Maven: org.webjars:modernizr:2.8.3" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:popper.js:1.14.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.10.6" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.11" level="project" />
     <orderEntry type="library" name="Maven: de.agilecoders.wicket:wicket-bootstrap-extensions:5.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:tempusdominus-bootstrap-4:5.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.bower:momentjs:2.24.0" level="project" />
@@ -274,6 +274,10 @@
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-http:4.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-safari-driver:4.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-support:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: javax.enterprise:cdi-api:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.interceptor:jboss-interceptor-api:1.1" level="project" />
+    <orderEntry type="library" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:2.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.9" level="project" />

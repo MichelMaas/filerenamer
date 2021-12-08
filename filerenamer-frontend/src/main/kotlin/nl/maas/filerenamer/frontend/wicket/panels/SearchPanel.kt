@@ -1,5 +1,6 @@
 package nl.maas.filerenamer.frontend.wicket.panels
 
+import nl.maas.filerenamer.events.TestEvent
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator.Companion.SEQUENCE
 import nl.maas.filerenamer.frontend.services.FileFinderService
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
@@ -15,9 +16,8 @@ import org.apache.wicket.markup.html.form.TextField
 import org.apache.wicket.markup.html.panel.Panel
 import org.apache.wicket.model.CompoundPropertyModel
 import org.apache.wicket.model.IModel
-import java.io.File
-import java.nio.file.Path
 import java.nio.file.Paths
+import javax.enterprise.event.Event
 import javax.inject.Inject
 
 class SearchPanel : Panel {
@@ -28,6 +28,9 @@ class SearchPanel : Panel {
 
     @Inject
     lateinit var modelCache: ModelCache
+
+//    @Inject
+//    lateinit var test: Event<TestEvent>;
 
     override fun onInitialize() {
         super.onInitialize()
@@ -65,6 +68,7 @@ class SearchPanel : Panel {
                 val searchPage = findParent(SearchPage::class.java)
                 modelCache.searchResult = this@SearchPanel.findFiles()
                 searchPage.findNavButton(ButtonTypes.FILES)?.setEnabled(true)
+//                test.fire(TestEvent())
                 target.add(searchPage)
             }
         }
