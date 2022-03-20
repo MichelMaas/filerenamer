@@ -162,7 +162,6 @@
     <build>
         <!--        <sourceDirectory>src/main/javasrc/main/kotlin</sourceDirectory>-->
         <!--        <sourceDirectory>src/main/kotlin</sourceDirectory>-->
-        <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -274,6 +273,16 @@
                 <includes>
                     <include>**/*.html</include>
                 </includes>
+            </resource>
+            <resource>
+                <directory>bin</directory>
+                <targetPath>../bin</targetPath>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>lib</directory>
+                <targetPath>../lib</targetPath>
+                <filtering>true</filtering>
             </resource>
             <!--            <resource>-->
             <!--                <filtering>false</filtering>-->
