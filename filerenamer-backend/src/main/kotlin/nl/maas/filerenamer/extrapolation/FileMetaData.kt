@@ -1,13 +1,15 @@
 package nl.maas.filerenamer.extrapolation
 
 import java.io.File
+import java.io.Serializable
 
-data class FileMetaData(val file: File) {
+data class FileMetaData(val file: File) : Serializable {
 
     val delimiters: List<String> = listOf()
     lateinit var dirName: String
     lateinit var name: String
-    var potentialSequenceNumbers: List<Int>? = null
+    @Transient
+    var potentialSequenceNumbers = emptySet<String>().toMutableSet()
     var sequence: String? = null
     var newName: String? = null
     lateinit var extrapolatedName: List<String>
@@ -19,6 +21,10 @@ data class FileMetaData(val file: File) {
     }
 
     fun hasPotentialSequenceFor(number: Int): Boolean {
-        return potentialSequenceNumbers?.contains(number)?:false
+        return potentialSequenceNumbers.map { it.toIntOrNull() }.filterNotNull().contains(number)
+    }
+
+    override fun toString(): String {
+        return name
     }
 }

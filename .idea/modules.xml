@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/filerenamer.iml" filepath="$PROJECT_DIR$/filerenamer.iml" />
       <module fileurl="file://$PROJECT_DIR$/filerenamer-backend/filerenamer-backend.iml" filepath="$PROJECT_DIR$/filerenamer-backend/filerenamer-backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/filerenamer-sb.iml" filepath="$PROJECT_DIR$/filerenamer-sb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/filerenamer-frontend/filerenamer-frontend.iml" filepath="$PROJECT_DIR$/filerenamer-frontend/filerenamer-frontend.iml" />
     </modules>
   </component>
 </project>
