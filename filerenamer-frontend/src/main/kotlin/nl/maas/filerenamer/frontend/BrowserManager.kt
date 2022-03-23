@@ -25,6 +25,7 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
 
     @Inject
     private lateinit var appContext: ApplicationContext
+    lateinit var driver: WebDriver
 
     private fun startBrowser() {
         val url = "http://localhost:8080"
@@ -32,7 +33,7 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
         try {
             if (os.indexOf("win") >= 0) {
                 startWinBrowser(url)
-            } else if (os.indexOf("lib/mac") >= 0) {
+            } else if (os.indexOf("mac") >= 0) {
                 startMacBrowser("url")
             } else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
                 startNixBrowser(url)
@@ -42,10 +43,18 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
         }
     }
 
+    fun close() {
+        driver.close()
+    }
+
     @Throws(IOException::class)
     private fun startNixBrowser(url: String) {
         System.setProperty("webdriver.edge.driver", "${findWebDrivers(Paths.get("/linux/msedgedriver"))}")
         startWebDriver(url)
+    }
+
+    private fun findWebDrivers(path: Path): String {
+        return FileUtils.findFile(path.toString())
     }
 
     @Throws(IOException::class)
@@ -60,14 +69,10 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
         startWebDriver(url)
     }
 
-    private fun findWebDrivers(path: Path): String {
-        return FileUtils.findFile(path.toString())
-    }
-
     private fun startWebDriver(url: String) {
         val options = EdgeOptions()
         options.addArguments("--app=$url")
-        val driver = EdgeDriver(options)
+        driver = EdgeDriver(options)
         driver[url]
         driver.manage().window().maximize()
         checkStatus(driver)

@@ -4,15 +4,15 @@
     <parent>
         <groupId>nl.maas.filerenamer</groupId>
         <artifactId>filerenamer</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>2022.1</version>
     </parent>
     <groupId>nl.maas.filerenamer</groupId>
     <artifactId>filerenamer-frontend</artifactId>
 
     <properties>
-        <wicketstuff.version>9.0.0</wicketstuff.version>
+        <wicketstuff.version>9.5.0</wicketstuff.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <wicket.version>9.0.0</wicket.version>
+        <wicket.version>9.7.0</wicket.version>
         <wicket-bootstrap.version>5.0.4</wicket-bootstrap.version>
         <wicket-bootstrap-less.version>4.0.4</wicket-bootstrap-less.version>
         <javafx.version>11</javafx.version>
@@ -27,11 +27,27 @@
         <dependency>
             <groupId>com.giffing.wicket.spring.boot.starter</groupId>
             <artifactId>wicket-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-autoconfigure</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wicketstuff</groupId>
             <artifactId>wicketstuff-annotation</artifactId>
             <version>${wicketstuff.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.wicketstuff/wicketstuff-progressbar -->
         <dependency>
@@ -39,7 +55,16 @@
             <artifactId>wicketstuff-progressbar</artifactId>
             <version>${wicketstuff.version}</version>
         </dependency>
+        <dependency>
+            <groupId>de.martinspielmann.wicket</groupId>
+            <artifactId>wicket-chartjs</artifactId>
+            <version>9.0.0-M2</version>
+        </dependency>
 
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-undertow</artifactId>-->
+        <!--        </dependency>-->
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.boot</groupId>-->
         <!--            <artifactId>spring-boot-starter-tomcat</artifactId>-->
@@ -53,9 +78,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <artifactId>kotlin-stdlib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -80,18 +110,37 @@
             <version>${wicket.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.wicket/wicket-cdi -->
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-cdi</artifactId>
-            <version>${wicket.version}</version>
-        </dependency>
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-firefox-driver -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
 
         <!--        Bootstrap-->
         <dependency>
@@ -146,16 +195,14 @@
             <version>${javafx.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>4.0.0</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <version>1.0</version>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
         </dependency>
     </dependencies>
 
@@ -167,6 +214,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <jvmArguments>
+                        ${jvm.options}
+                    </jvmArguments>
                     <fork>false</fork>
                     <skip>false</skip>
                 </configuration>
@@ -225,6 +275,11 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <executions>
                     <!-- Replacing default-compile as it is treated specially by maven -->
@@ -261,6 +316,12 @@
                     <mainClass>HelloFX</mainClass>
                 </configuration>
             </plugin>
+            <!--            <plugin>-->
+            <!--                <artifactId>maven-assembly-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <outputDirectory>${project.basedir}/target/${project.version}/</outputDirectory>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
         <resources>
             <resource>
@@ -275,14 +336,14 @@
                 </includes>
             </resource>
             <resource>
-                <directory>bin</directory>
-                <targetPath>../bin</targetPath>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-            </resource>
-            <resource>
-                <directory>lib</directory>
-                <targetPath>../lib</targetPath>
-                <filtering>true</filtering>
+                <includes>
+                    <include>**/application.json</include>
+                    <include>**/install.sh</include>
+                    <include>**/start.bat</include>
+                    <include>**/start.sh</include>
+                </includes>
             </resource>
             <!--            <resource>-->
             <!--                <filtering>false</filtering>-->

@@ -23,9 +23,15 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 class BootstrapConfig : WicketApplicationInitConfiguration {
     @Autowired
     private lateinit var prop: BootstrapProperties
+    private lateinit var webApplication: WebApplication
     override fun init(webApplication: WebApplication) {
+        this.webApplication = webApplication
+        configure()
+    }
+
+    fun configure() {
         val themeProvider: ThemeProvider = BootswatchThemeProvider(prop.theme)
-        prop.setThemeProvider(themeProvider)
+        prop.themeProvider = themeProvider
         Bootstrap.install(webApplication, prop)
         BootstrapLess.install(webApplication)
     }

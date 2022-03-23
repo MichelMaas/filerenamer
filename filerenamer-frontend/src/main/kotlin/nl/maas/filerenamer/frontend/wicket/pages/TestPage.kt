@@ -1,11 +1,13 @@
 package nl.maas.filerenamer.frontend.wicket.pages
 
-import nl.maas.filerenamer.frontend.wicket.panels.TestPanel
 import org.apache.wicket.request.mapper.parameter.PageParameters
 
 class TestPage(parameters: PageParameters?) : BasePage(parameters) {
-    override fun onBeforeRender() {
-        super.onBeforeRender()
-        addOrReplace(TestPanel("panel"))
-    }
+//    override fun onBeforeRender() {
+//        super.onBeforeRender()
+//
+//        val profitPerMonth = modelCache.fxDataSet.profitPerMonth(2021)
+//        val linePanel = SingleDataViewPanel("panel", Pair("Worth", modelCache.fxDataSet.worth().toString()))
+//        addOrReplace(linePanel)
+//    }
 }

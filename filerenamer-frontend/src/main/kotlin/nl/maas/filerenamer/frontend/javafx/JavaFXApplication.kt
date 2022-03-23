@@ -5,25 +5,25 @@ import javafx.scene.Scene
 import javafx.scene.layout.StackPane
 import javafx.scene.web.WebView
 import javafx.stage.Stage
-import nl.maas.filerenamer.frontend.ContextProvider
 
-class JavaFXApplication() : Application() {
+class JavaFXApplication : Application() {
 
 
     override fun start(stage: Stage) {
-        stage.setTitle("Filerenamer")
+        stage.title = "Filerenamer"
         stage.isMaximized = true
         val webView = WebView()
+        webView.isContextMenuEnabled = true
         webView.engine.load("http://localhost:8080")
         val stackPane = StackPane(webView)
         val scene = Scene(stackPane)
-        stage.setScene(scene)
+        stage.scene = scene
         stage.show()
     }
 
     override fun stop() {
         super.stop()
-        val ctx = ContextProvider.ctx
+        val ctx = nl.maas.filerenamer.frontend.ContextProvider.ctx
         ctx.close()
     }
 

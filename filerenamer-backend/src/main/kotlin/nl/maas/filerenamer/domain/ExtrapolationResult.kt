@@ -19,4 +19,8 @@ data class ExtrapolationResult(
         list.addAll(warnings)
         this.warnings = list;
     }
+
+    fun renameRequired(): Boolean {
+        return files.any { !"${it.name}.${it.file.extension}".equals(it.newName) }
+    }
 }
