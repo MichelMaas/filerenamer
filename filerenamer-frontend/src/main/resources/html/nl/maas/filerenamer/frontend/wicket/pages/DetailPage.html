@@ -9,8 +9,27 @@
 <body>
 <wicket:extend>
     <div class="container">
-        <wicket:container wicket:id="panel"/>
-    </div>
+      <div class="modal-body row">
+                  <div class="col-md-5">
+                      <wicket:container wicket:id="dataL">
+                          <wicket:container wicket:id="data"/>
+                      </wicket:container>
+                  </div>
+                  <div class="col-md-5">
+                      <wicket:container wicket:id="dataR">
+                          <wicket:container wicket:id="data"/>
+                      </wicket:container>
+                  </div>
+              </div>
+            </div>
+            <div class="modal-body row">
+              <div class="col-md-3">
+                <wicket:container wicket:id="table"/>
+              </div>
+              <div class="col-md-7">
+                <wicket:container wicket:id="form"/>
+              </div>
+            </div>
 </wicket:extend>
 </body>
 </html>
