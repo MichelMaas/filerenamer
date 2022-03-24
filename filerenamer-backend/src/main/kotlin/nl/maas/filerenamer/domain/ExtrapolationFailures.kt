@@ -1,5 +1,6 @@
 package nl.maas.filerenamer.domain
 
+import nl.maas.filerenamer.extrapolation.FileMetaData
 import java.io.Serializable
 
 data class ExtrapolationFailures(val failures: MutableMap<String, MutableSet<ExtrapolationFailure<out Serializable>>>) :
@@ -33,4 +34,8 @@ data class ExtrapolationFailures(val failures: MutableMap<String, MutableSet<Ext
     }
 
     fun isEmpty() = failures.isEmpty()
+
+    fun hasFailures(fileMetaData: FileMetaData): Boolean {
+        return failures.values.any { it.any { flr -> flr.failed.contains(fileMetaData) } }
+    }
 }

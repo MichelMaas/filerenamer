@@ -1,20 +1,28 @@
 package nl.maas.filerenamer.frontend.wicket.pages
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.BootstrapButton
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons
+import nl.maas.filerenamer.frontend.services.FileService
 import nl.maas.filerenamer.frontend.wicket.components.DynamicTableComponent
 import nl.maas.filerenamer.frontend.wicket.objects.Tuple
+import org.apache.wicket.ajax.AjaxEventBehavior
 import org.apache.wicket.ajax.AjaxRequestTarget
+import org.apache.wicket.model.Model
 import org.apache.wicket.request.mapper.parameter.PageParameters
+import javax.inject.Inject
 
 class OverviewPage(parameters: PageParameters) : BasePage(parameters) {
 
+    @Inject
+    lateinit var fileService: FileService
+
     override fun onBeforeRender() {
         super.onBeforeRender()
-//        addOrReplace(object : ListView<File>("folders", modelCache.files.keys.toList()) {
-//            override fun populateItem(item: ListItem<File>) {
-//                item.add(Label("folder", item.modelObject.path))
-//            }
-//        })
+        setUpTable()
+        setUpApply()
+    }
 
+    private fun setUpTable() {
         addOrReplace(object : DynamicTableComponent("folders", modelCache.files.keys.map {
             Tuple(mapOf(Pair("Name", it.name), Pair("path", it.path)))
         }.toMutableList()) {
@@ -26,5 +34,21 @@ class OverviewPage(parameters: PageParameters) : BasePage(parameters) {
                 target.add(this@OverviewPage)
             }
         })
+    }
+
+    private fun setUpApply() {
+        val button = object : BootstrapButton("apply", Model.of("Apply"), Buttons.Type.Primary) {}
+        button.add(object : AjaxEventBehavior("click") {
+            override fun onEvent(target: AjaxRequestTarget) {
+                val filtered = modelCache.files.filter { it.value.failures.isEmpty() }
+                filtered.keys.forEach {
+                    val extrapolationResult = modelCache.files[it]!!
+                    fileService.process(extrapolationResult.files)
+                }
+                modelCache.files = filtered
+                target.add(this@OverviewPage)
+            }
+        })
+        addOrReplace(button)
     }
 }

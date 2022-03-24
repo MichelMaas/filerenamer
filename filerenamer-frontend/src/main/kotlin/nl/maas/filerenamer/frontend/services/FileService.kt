@@ -6,11 +6,12 @@ import nl.maas.filerenamer.extrapolation.NewNameExtrapolator
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator.Companion.SEQUENCE
 import nl.maas.filerenamer.io.FileHandler
+import nl.maas.filerenamer.io.RenameOrder
 import org.springframework.stereotype.Component
 import java.io.File
 
 @Component
-class FileFinderService {
+class FileService {
 
     fun findIn(path: String): Map<File, List<FileMetaData>> {
         val filesIn = FileHandler().searchFilesIn(path)
@@ -25,5 +26,9 @@ class FileFinderService {
             .map { it.key to sequenceExtrapolator.findSequenceForFiles(it.value) }.toMap()
         sequenced.forEach { NewNameExtrapolator().determineNameForFiles(it.value.files) }
         return sequenced.filter { it.value.renameRequired() }
+    }
+
+    fun process(files: List<FileMetaData>) {
+        files.forEach { FileHandler().renameFiles(RenameOrder(it.file, it.newName)) }
     }
 }

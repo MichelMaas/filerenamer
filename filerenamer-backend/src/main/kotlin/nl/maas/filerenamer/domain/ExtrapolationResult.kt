@@ -21,6 +21,6 @@ data class ExtrapolationResult(
     }
 
     fun renameRequired(): Boolean {
-        return files.any { !"${it.name}.${it.file.extension}".equals(it.newName) }
+        return files.any { !it.proposedNames.contains("${it.name}.${it.file.extension}") }
     }
 }

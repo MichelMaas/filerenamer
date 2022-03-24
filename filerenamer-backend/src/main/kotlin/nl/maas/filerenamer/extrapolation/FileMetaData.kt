@@ -8,11 +8,16 @@ data class FileMetaData(val file: File) : Serializable {
     val delimiters: List<String> = listOf()
     lateinit var dirName: String
     lateinit var name: String
+
     @Transient
     var potentialSequenceNumbers = emptySet<String>().toMutableSet()
     var sequence: String? = null
-    var newName: String? = null
+    var newName: String
+        get() = if (includeParentMapInName) proposedNames[1] else proposedNames[0]
+        set(name) = if (includeParentMapInName) proposedNames[1] = name else proposedNames[0] = name
     lateinit var extrapolatedName: List<String>
+    var includeParentMapInName = false
+    var proposedNames: Array<String> = arrayOf("", "")
 
     init {
         name = file.nameWithoutExtension

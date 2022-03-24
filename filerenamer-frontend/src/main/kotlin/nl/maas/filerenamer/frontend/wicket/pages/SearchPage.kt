@@ -2,7 +2,7 @@ package nl.maas.filerenamer.frontend.wicket.pages
 
 import com.giffing.wicket.spring.boot.context.scan.WicketHomePage
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator.Companion.SEQUENCE
-import nl.maas.filerenamer.frontend.services.FileFinderService
+import nl.maas.filerenamer.frontend.services.FileService
 import nl.maas.filerenamer.frontend.wicket.components.DynamicFormComponent
 import nl.maas.filerenamer.frontend.wicket.objects.Filter
 import org.apache.wicket.ajax.AjaxRequestTarget
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class SearchPage(parameters: PageParameters) : BasePage(parameters) {
 
     @Inject
-    lateinit var fileFinderService: FileFinderService
+    lateinit var fileService: FileService
 
     override fun onBeforeRender() {
         super.onBeforeRender()
@@ -27,7 +27,7 @@ class SearchPage(parameters: PageParameters) : BasePage(parameters) {
                 override fun onSubmit(target: AjaxRequestTarget) {
                     super.onSubmit(target)
                     modelCache.files =
-                        fileFinderService.findAndProcessFrom(modelCache.filter.path, modelCache.filter.sequence)
+                        fileService.findAndProcessFrom(modelCache.filter.path, modelCache.filter.sequence)
                     target.add(this@SearchPage)
                 }
             }.addTextBox("path", "Path").addSelect("sequence", "Sequence", SEQUENCE.values().asList())
