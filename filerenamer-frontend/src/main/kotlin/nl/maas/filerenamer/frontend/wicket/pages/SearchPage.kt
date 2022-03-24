@@ -30,7 +30,7 @@ class SearchPage(parameters: PageParameters) : BasePage(parameters) {
                         fileService.findAndProcessFrom(modelCache.filter.path, modelCache.filter.sequence)
                     target.add(this@SearchPage)
                 }
-            }.addTextBox("path", "Path").addSelect("sequence", "Sequence", SEQUENCE.values().asList())
+            }.addTextBox("path", "Path").addSelect("sequence", "Sequence", SEQUENCE.values().asList(), SEQUENCE.NUMBER)
         addOrReplace(form)
     }
 

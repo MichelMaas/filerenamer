@@ -84,7 +84,9 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
                 Thread.sleep(1000)
             }
         } catch (ex: WebDriverException) {
-            SpringApplication.exit(appContext, ExitCodeGenerator { 0 })
+            val exit = SpringApplication.exit(appContext, ExitCodeGenerator { 0 })
+            driver.quit()
+            System.exit(exit)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }

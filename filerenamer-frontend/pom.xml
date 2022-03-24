@@ -316,12 +316,12 @@
                     <mainClass>HelloFX</mainClass>
                 </configuration>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <artifactId>maven-assembly-plugin</artifactId>-->
-            <!--                <configuration>-->
-            <!--                    <outputDirectory>${project.basedir}/target/${project.version}/</outputDirectory>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>${project.basedir}/target/${project.version}/</outputDirectory>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -345,6 +345,16 @@
                     <include>**/start.sh</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>bin</directory>
+                <targetPath>../bin</targetPath>
+                <filtering>true</filtering>
+            </resource>
+            <!--            <resource>-->
+            <!--                <directory>lib</directory>-->
+            <!--                <targetPath>../lib</targetPath>-->
+            <!--                <filtering>true</filtering>-->
+            <!--            </resource>-->
             <!--            <resource>-->
             <!--                <filtering>false</filtering>-->
             <!--                <directory>src/main/java</directory>-->

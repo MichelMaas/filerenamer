@@ -102,9 +102,10 @@ open class DynamicFormComponent<T>(id: String, val formTitle: String, model: ICo
     fun <M : Serializable> addSelect(
         id: String,
         label: String,
-        options: List<M>
+        options: List<M>,
+        default: M = options.first()
     ): DynamicFormComponent<T> {
-        formComponents.addOrReplace(SelectFragment(id, label, Model.ofList(options)))
+        formComponents.addOrReplace(SelectFragment(id, label, Model.ofList(options), default))
         return this
     }
 
@@ -273,7 +274,7 @@ open class DynamicFormComponent<T>(id: String, val formTitle: String, model: ICo
         val propertyName: String,
         val label: String,
         val options: IModel<List<M>>,
-        vararg val default: M
+        val default: M = options.`object`.first()
     ) :
         ResettableFormFragment<M>(
             "${propertyName}-${formComponents.newChildId()}",
@@ -290,7 +291,7 @@ open class DynamicFormComponent<T>(id: String, val formTitle: String, model: ICo
 
                 override fun onBeforeRender() {
                     super.onBeforeRender()
-                    if (modelObject == null && !default.isNullOrEmpty()) {
+                    if (modelObject == null) {
                         modelObject = default
                     }
                 }
