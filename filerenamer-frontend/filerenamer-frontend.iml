@@ -22,8 +22,14 @@
           <option name="additionalArguments" value="-Xjsr305=strict" />
         </compilerSettings>
         <compilerArguments>
+          <option name="jvmTarget" value="1.8" />
           <option name="languageVersion" value="1.5" />
           <option name="apiVersion" value="1.5" />
+          <option name="pluginClasspaths">
+            <array>
+              <option value="$KOTLIN_BUNDLED$/lib/allopen-compiler-plugin.jar" />
+            </array>
+          </option>
           <option name="pluginOptions">
             <array>
               <option value="plugin:org.jetbrains.kotlin.allopen:annotation=org.springframework.stereotype.Component" />
@@ -32,11 +38,6 @@
               <option value="plugin:org.jetbrains.kotlin.allopen:annotation=org.springframework.cache.annotation.Cacheable" />
               <option value="plugin:org.jetbrains.kotlin.allopen:annotation=org.springframework.boot.test.context.SpringBootTest" />
               <option value="plugin:org.jetbrains.kotlin.allopen:annotation=org.springframework.validation.annotation.Validated" />
-            </array>
-          </option>
-          <option name="pluginClasspaths">
-            <array>
-              <option value="$KOTLIN_BUNDLED$/lib/allopen-compiler-plugin.jar" />
             </array>
           </option>
           <option name="errors">
@@ -168,6 +169,8 @@
     <orderEntry type="library" name="Maven: commons-fileupload:commons-fileupload:1.4" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.4" level="project" />
+    <orderEntry type="library" name="Maven: nl.maas.wicket.framework:wicket.framework.lib:2023.5-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.vaadin:open:8.4.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-configuration-processor:2.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-text:1.9" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-chrome-driver:4.0.0" level="project" />

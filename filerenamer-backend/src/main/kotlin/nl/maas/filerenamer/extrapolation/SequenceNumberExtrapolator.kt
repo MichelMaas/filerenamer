@@ -108,12 +108,12 @@ class SequenceNumberExtrapolator : SequenceExtrapolator {
         val files = result.files
         files.forEach { fileData ->
             fileData.potentialSequenceNumbers =
-                fileData.extrapolatedName.filter { snp ->
-                    files.filter { !it.name.equals(fileData.name) }.none { it.extrapolatedName.contains(snp) }
-                }.map { it.toIntOrNull() }.filterNotNull().map { it.toString() }.toMutableSet()
+                fileData.extrapolatedName.filterIndexed { index, s ->
+                    files.filterNot { f -> f.name.equals(fileData.name) }
+                        .none { f -> f.extrapolatedName[index].equals(s) }
+                }.map { it.toIntOrNull() }.filterNotNull().filterNot { it > files.size }.map { it.toString() }
+                    .toMutableSet()
             if (fileData.potentialSequenceNumbers.isEmpty()) {
-//                print("No sequence number found for ${fileData.name}. Please provide the sequencenumber for this file or (s)kip: ")
-//                fileData.potentialSequenceNumbers = listOf(readLine()!!.toIntOrNull()).filterNotNull()
                 result.failures.add(
                     fileData.dirName,
                     ExtrapolationFailure(
