@@ -37,6 +37,7 @@ interface SequenceExtrapolator {
         }
     }
 
+
     fun findSequenceForFiles(fileData: List<FileMetaData>): ExtrapolationResult
 
 }
