@@ -15,9 +15,6 @@ import java.nio.file.Path;
 public class WicketApplication extends WebApplication {
 
     public static void main(String[] args) throws Exception {
-//        ConfigurableApplicationContext run = new SpringApplicationBuilder()
-//                .sources(WicketApplication.class)
-//                .run(args);
         SpringApplication.run(WicketApplication.class, args);
     }
 
@@ -36,8 +33,6 @@ public class WicketApplication extends WebApplication {
     }
 
     public WicketApplication() {
-//        FileSystemResourceReference favicon = new FileSystemResourceReference("favicon", Path.of(this.getClass().getResource("/open/images/icon.png").getPath()));
-//        mountResource("/images/icon.png", favicon);
     }
 
     @Override

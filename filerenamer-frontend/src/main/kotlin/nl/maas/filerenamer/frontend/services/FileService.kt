@@ -1,10 +1,10 @@
 package nl.maas.filerenamer.frontend.services
 
 import nl.maas.filerenamer.domain.ExtrapolationResult
+import nl.maas.filerenamer.domain.enums.SEQUENCE
 import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.extrapolation.NewNameExtrapolator
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator
-import nl.maas.filerenamer.extrapolation.SequenceExtrapolator.Companion.SEQUENCE
 import nl.maas.filerenamer.io.FileHandler
 import nl.maas.filerenamer.io.RenameOrder
 import org.springframework.stereotype.Component

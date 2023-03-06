@@ -1,12 +1,12 @@
 package nl.maas.filerenamer.frontend.wicket.objects
 
-import nl.maas.filerenamer.frontend.wicket.pages.BasePage
+import nl.maas.wicket.framework.pages.BasePage
 import kotlin.reflect.KClass
 
 data class I10N(
     val languages: List<Language>
 ) {
-    fun <T : KClass<out BasePage>> translate(page: T, label: String, languageCode: String): String {
+    fun <T : KClass<out BasePage<*>>> translate(page: T, label: String, languageCode: String): String {
         return findPage(page, languageCode, label).labels.entries.firstOrNull {
             it.key.equals(
                 label,
@@ -15,7 +15,7 @@ data class I10N(
         }?.value ?: label
     }
 
-    private fun <T : KClass<out BasePage>> findPage(page: T, languageCode: String, label: String): Page {
+    private fun <T : KClass<out BasePage<*>>> findPage(page: T, languageCode: String, label: String): Page {
         val language = languages.first { languageCode.equals(it.code) }
         return (language.pages.firstOrNull {
             it.labels.keys.any { k ->
@@ -28,7 +28,7 @@ data class I10N(
         } ?: language.pages.first { it.name.equals(BasePage::class.simpleName) })
     }
 
-    fun <T : KClass<out BasePage>> untranslate(page: T, label: String, languageCode: String): String {
+    fun <T : KClass<out BasePage<*>>> untranslate(page: T, label: String, languageCode: String): String {
         return findPage(page, languageCode, label).labels.entries.firstOrNull {
             it.value.equals(
                 label,

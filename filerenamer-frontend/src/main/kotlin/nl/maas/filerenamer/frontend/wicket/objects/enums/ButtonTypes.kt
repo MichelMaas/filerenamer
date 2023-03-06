@@ -5,22 +5,31 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome5I
 import nl.maas.filerenamer.frontend.ContextProvider
 import nl.maas.filerenamer.frontend.wicket.caches.PropertiesCache
 import nl.maas.filerenamer.frontend.wicket.pages.*
+import nl.maas.wicket.framework.components.elemental.BaseNavbarButton
+import nl.maas.wicket.framework.objects.enums.ButtonType
+import nl.maas.wicket.framework.pages.BasePage
+import nl.maas.wicket.framework.services.Translator
 import kotlin.reflect.KClass
 
 @OptIn(ExperimentalStdlibApi::class)
-enum class ButtonTypes(val pageClass: KClass<out BasePage>, val iconType: IconType) {
-
+enum class ButtonTypes(override val pageClass: KClass<out BasePage<*>>, override val iconType: IconType) : ButtonType {
 
     SEARCH(SearchPage::class, FontAwesome5IconType.search_s),
+    OVERVIEW(OverviewPage::class, FontAwesome5IconType.list_s);
 
-    //    OPTIONS(OptionsPage::class, FontAwesome5IconType.cogs_s),
-    OVERVIEW(OverviewPage::class, FontAwesome5IconType.folder_r),
+//    //    OPTIONS(OptionsPage::class, FontAwesome5IconType.cogs_s),
+//    OVERVIEW(OverviewPage::class, FontAwesome5IconType.folder_r),
+//
+//    //    Transactions(TransactionsPage::class, FontAwesome5IconType.coins_s),
+//    TEST(TestPage::class, FontAwesome5IconType.cogs_s),
+//    DETAIL(DetailPage::class, FontAwesome5IconType.file_video_r);
 
-    //    Transactions(TransactionsPage::class, FontAwesome5IconType.coins_s),
-    TEST(TestPage::class, FontAwesome5IconType.cogs_s),
-    DETAIL(DetailPage::class, FontAwesome5IconType.file_video_r);
-
-    fun label(): String {
-        return ContextProvider.ctx.getBean(PropertiesCache::class.java).translator.translate(pageClass, "title")
+    override fun label(translator: Translator): String {
+        return translator.translate(name)
     }
+
+    fun label(): String =
+        label(ContextProvider.ctx.getBean(PropertiesCache::class.java).translator.forPageClass(pageClass))
+
+    fun toNavBarButton(): BaseNavbarButton = BaseNavbarButton(this)
 }

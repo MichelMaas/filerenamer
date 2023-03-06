@@ -1,9 +1,10 @@
 package nl.maas.filerenamer.frontend.wicket.caches
 
 import nl.maas.filerenamer.frontend.wicket.objects.I10N
-import nl.maas.filerenamer.frontend.wicket.pages.BasePage
 import nl.maas.filerenamer.io.FileUtils
 import nl.maas.filerenamer.io.JsonUtils
+import nl.maas.wicket.framework.pages.BasePage
+import nl.maas.wicket.framework.services.Translator
 import org.apache.wicket.resource.FileSystemResourceReference
 import org.springframework.stereotype.Component
 import java.nio.file.Path
@@ -29,16 +30,27 @@ class PropertiesCache {
     inner class Translator(
         val propertiesCache: PropertiesCache,
         val supportedLanguages: List<String> = propertiesCache.i10N.languages.map { it.name }
-    ) {
-        fun <T : KClass<out BasePage>> translate(page: T, key: String) =
-            i10N.translate(page, key, currentLanguage)
+    ) : nl.maas.wicket.framework.services.Translator {
 
-        fun <T : KClass<out BasePage>> untranslate(page: T, key: String) =
-            i10N.untranslate(page, key, currentLanguage)
+        var page: KClass<out BasePage<*>> = BasePage::class
 
-        val currentLanguage
+        override val language: String
             get() = propertiesCache.i10N.languages.firstOrNull { "nl".equals(it.code) }?.code
                 ?: propertiesCache.i10N.languages.first { "en".equals(it.code) }.code
+
+        fun <T : BasePage<*>> forPage(page: T): Translator {
+            this.page = page::class
+            return this
+        }
+
+        fun forPageClass(page: KClass<out BasePage<*>>): Translator {
+            this.page = page
+            return this
+        }
+
+        override fun translate(word: String): String = i10N.translate(page, word, language)
+
+        override fun unTranslate(word: String): String = i10N.untranslate(page, word, language)
     }
 
 }

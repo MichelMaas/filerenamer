@@ -3,10 +3,10 @@ package nl.maas.filerenamer.program
 import nl.maas.filerenamer.domain.ExtrapolationFailure
 import nl.maas.filerenamer.domain.ExtrapolationFailures.FailureType
 import nl.maas.filerenamer.domain.ExtrapolationResult
+import nl.maas.filerenamer.domain.enums.SEQUENCE
 import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.extrapolation.NewNameExtrapolator
 import nl.maas.filerenamer.extrapolation.SequenceExtrapolator
-import nl.maas.filerenamer.extrapolation.SequenceExtrapolator.Companion.SEQUENCE.Companion.forValue
 import nl.maas.filerenamer.io.FileHandler
 import nl.maas.filerenamer.io.RenameOrder
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -79,7 +79,7 @@ fun requestManualSequence(failures: Set<ExtrapolationFailure<Int>>) {
 
 private fun requestSequenceExtrapolator(): SequenceExtrapolator {
     print("Do the files you wish to rename have a (N)umerical sequence, or should they be sequenced by (D)ate?: ")
-    val sequence = forValue(readLine()!!)
+    val sequence = SEQUENCE.forValue(readLine()!!)
     var sequenceExtrapolator = SequenceExtrapolator.instance(sequence)
     return sequenceExtrapolator
 }
