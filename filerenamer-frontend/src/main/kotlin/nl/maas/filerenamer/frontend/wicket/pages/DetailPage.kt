@@ -14,7 +14,8 @@ import org.apache.wicket.Component
 
 class DetailPage : BasePage<ModelCache>(
     ContextProvider.ctx.getBean(ModelCache::class.java),
-    ContextProvider.ctx.getBean(PropertiesCache::class.java).translator.forPageClass(SearchPage::class)
+    ContextProvider.ctx.getBean(PropertiesCache::class.java).translator.forPageClass(SearchPage::class),
+    brandName = "File renamer"
 ) {
 
     override fun onBeforeRender() {

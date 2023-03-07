@@ -20,7 +20,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean
 open class SearchPage() :
     BasePage<ModelCache>(
         ContextProvider.ctx.getBean(ModelCache::class.java),
-        ContextProvider.ctx.getBean(GoogleTranslator::class.java)
+        ContextProvider.ctx.getBean(GoogleTranslator::class.java),
+        brandName = "File renamer"
     ) {
 
     private var searchCriteria: SearchCriteria = SearchCriteria()

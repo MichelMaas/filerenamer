@@ -3,8 +3,8 @@ package nl.maas.filerenamer.frontend.wicket.pages
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton
 import nl.maas.filerenamer.domain.ExtrapolationResult
 import nl.maas.filerenamer.frontend.ContextProvider
+import nl.maas.filerenamer.frontend.wicket.caches.GoogleTranslator
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
-import nl.maas.filerenamer.frontend.wicket.caches.PropertiesCache
 import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
 import nl.maas.wicket.framework.components.base.DynamicPanel
 import nl.maas.wicket.framework.components.base.DynamicTableComponent
@@ -16,7 +16,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget
 
 class OverviewPage : BasePage<ModelCache>(
     ContextProvider.ctx.getBean(ModelCache::class.java),
-    ContextProvider.ctx.getBean(PropertiesCache::class.java).translator.forPageClass(SearchPage::class)
+    ContextProvider.ctx.getBean(GoogleTranslator::class.java),
+    brandName = "File renamer"
 ) {
 
     override fun onBeforeRender() {
@@ -32,7 +33,9 @@ class OverviewPage : BasePage<ModelCache>(
     private fun setUpTable(): Component {
         return object : DynamicTableComponent(
             DynamicPanel.ROW_CONTENT_ID,
-            modelCache.files.map { Tuple("Path" to it.key.path, "Succeeded" to validate(it.value)) }.toMutableList()
+            modelCache.files.map { Tuple("Path" to it.key.path, "Succeeded" to validate(it.value)) }.toMutableList(),
+            translator,
+            false
         ) {
             override fun onTupleClick(target: AjaxRequestTarget, tuple: Tuple) {
                 modelCache.selectedFolder =
