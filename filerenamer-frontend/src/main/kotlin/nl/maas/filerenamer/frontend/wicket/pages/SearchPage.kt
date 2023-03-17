@@ -4,7 +4,6 @@ import com.giffing.wicket.spring.boot.context.scan.WicketHomePage
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton
 import nl.maas.filerenamer.domain.enums.SEQUENCE
 import nl.maas.filerenamer.frontend.ContextProvider
-import nl.maas.filerenamer.frontend.services.FileService
 import nl.maas.filerenamer.frontend.wicket.caches.GoogleTranslator
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.objects.SearchCriteria
@@ -14,7 +13,6 @@ import nl.maas.wicket.framework.components.elemental.BaseNavbarButton
 import nl.maas.wicket.framework.pages.BasePage
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.model.CompoundPropertyModel
-import org.apache.wicket.spring.injection.annot.SpringBean
 
 @WicketHomePage
 open class SearchPage() :
@@ -23,11 +21,6 @@ open class SearchPage() :
         ContextProvider.ctx.getBean(GoogleTranslator::class.java),
         brandName = "File renamer"
     ) {
-
-    private var searchCriteria: SearchCriteria = SearchCriteria()
-
-    @SpringBean
-    private lateinit var fileService: FileService
 
     override fun onBeforeRender() {
         super.onBeforeRender()
@@ -38,20 +31,17 @@ open class SearchPage() :
         return object : DynamicFormComponent<SearchCriteria>(
             "panel",
             "Search",
-            CompoundPropertyModel.of(searchCriteria),
+            CompoundPropertyModel.of(modelCache.searchCriteria),
             translator,
             this
         ) {
-            override fun onSubmit(target: AjaxRequestTarget, typedModelObject: SearchCriteria) {
-                super.onSubmit(target, typedModelObject)
-                modelCache.files = fileService.findAndProcessFrom(
-                    searchCriteria.folderPath,
-                    searchCriteria.sequence
-                )
+            override fun onAfterSubmit(target: AjaxRequestTarget, typedModelObject: SearchCriteria) {
+                super.onAfterSubmit(target, typedModelObject)
+                modelCache.refresh()
                 setResponsePage(OverviewPage::class.java)
             }
         }.addTextBox("folderPath", "Path")
-            .addSelect("sequence", "Sequence", SEQUENCE.values().toList(), searchCriteria.sequence)
+            .addSelect("sequence", "Sequence", SEQUENCE.values().toList(), modelCache.searchCriteria.sequence)
     }
 
     override fun createNavBarButtons(): Array<NavbarButton<*>> {

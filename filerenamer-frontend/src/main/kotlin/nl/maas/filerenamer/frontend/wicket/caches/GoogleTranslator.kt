@@ -8,12 +8,11 @@ import java.util.*
 @Component
 class GoogleTranslator() : Translator {
 
-    val translator: me.bush.translator.Translator = me.bush.translator.Translator()
     override val language: String
         get() = Locale.getDefault().language
 
     override fun translate(word: String): String {
-        return translator.translateBlocking(
+        return me.bush.translator.Translator().translateBlocking(
             word,
             Language.valueOf(Locale.getDefault().getDisplayLanguage(Locale.ENGLISH).uppercase()),
             Language.ENGLISH
@@ -21,7 +20,7 @@ class GoogleTranslator() : Translator {
     }
 
     override fun unTranslate(word: String): String {
-        return translator.translateBlocking(
+        return me.bush.translator.Translator().translateBlocking(
             word,
             Language.ENGLISH,
             Language.valueOf(Locale.getDefault().getDisplayLanguage(Locale.ENGLISH).uppercase())

@@ -9,9 +9,10 @@ import nl.maas.filerenamer.io.FileHandler
 import nl.maas.filerenamer.io.RenameOrder
 import org.springframework.stereotype.Component
 import java.io.File
+import java.io.Serializable
 
 @Component
-class FileService {
+class FileService : Serializable {
 
     fun findIn(path: String): Map<File, List<FileMetaData>> {
         val filesIn = FileHandler().searchFilesIn(path)
@@ -30,5 +31,10 @@ class FileService {
 
     fun process(files: List<FileMetaData>) {
         files.forEach { FileHandler().renameFiles(RenameOrder(it.file, it.newName)) }
+    }
+
+    fun update(file: FileMetaData, numberOfFiles: Int) {
+        file.proposedNames = NewNameExtrapolator.determineName(file, numberOfFiles)
+        file.newName = if (file.includeParentMapInName) file.proposedNames[1] else file.proposedNames[0]
     }
 }

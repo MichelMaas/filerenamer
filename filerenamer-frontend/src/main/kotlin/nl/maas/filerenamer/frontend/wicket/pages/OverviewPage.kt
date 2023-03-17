@@ -6,13 +6,12 @@ import nl.maas.filerenamer.frontend.ContextProvider
 import nl.maas.filerenamer.frontend.wicket.caches.GoogleTranslator
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
+import nl.maas.wicket.framework.components.base.DynamicDataTable
 import nl.maas.wicket.framework.components.base.DynamicPanel
-import nl.maas.wicket.framework.components.base.DynamicTableComponent
 import nl.maas.wicket.framework.components.elemental.BaseNavbarButton
 import nl.maas.wicket.framework.objects.Tuple
 import nl.maas.wicket.framework.pages.BasePage
 import org.apache.wicket.Component
-import org.apache.wicket.ajax.AjaxRequestTarget
 
 class OverviewPage : BasePage<ModelCache>(
     ContextProvider.ctx.getBean(ModelCache::class.java),
@@ -31,24 +30,17 @@ class OverviewPage : BasePage<ModelCache>(
     }
 
     private fun setUpTable(): Component {
-        return object : DynamicTableComponent(
+        return DynamicDataTable.get(
             DynamicPanel.ROW_CONTENT_ID,
             modelCache.files.map { Tuple("Path" to it.key.path, "Succeeded" to validate(it.value)) }.toMutableList(),
-            translator,
-            false
-        ) {
-            override fun onTupleClick(target: AjaxRequestTarget, tuple: Tuple) {
+            20,
+            { target, tuple ->
                 modelCache.selectedFolder =
                     modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
-                val extrapolationResult =
-                    modelCache.files[modelCache.selectedFolder]
-                if (extrapolationResult?.files?.any { extrapolationResult.failures.hasFailures(it) } ?: false) {
-                    modelCache.selectedFolder =
-                        modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
-                    setResponsePage(DetailPage::class.java)
-                }
-            }
-        }
+                modelCache.selectedFolder =
+                    modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
+                setResponsePage(DetailPage::class.java)
+            }).hover().light().sm()
     }
 
     private fun validate(value: ExtrapolationResult): String {

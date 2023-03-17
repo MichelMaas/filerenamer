@@ -4,15 +4,15 @@ import nl.maas.filerenamer.extrapolation.FileMetaData
 import java.io.Serializable
 
 data class ExtrapolationResult(
-    val files: List<FileMetaData>,
+    private val _files: List<FileMetaData>,
     var warnings: List<Warning>,
     val failures: ExtrapolationFailures
 ) : Serializable {
-    constructor(files: List<FileMetaData>) : this(files, ArrayList(), ExtrapolationFailures(HashMap()))
+    constructor(_files: List<FileMetaData>) : this(_files, ArrayList(), ExtrapolationFailures(HashMap()))
 
 
-    var min = 0
-    var max = 0
+    var sequence: List<Int> = listOf()
+    val files = _files.sortedBy { it.name }
 
     fun addWarnings(vararg warnings: Warning) {
         val list = ArrayList(this.warnings)
