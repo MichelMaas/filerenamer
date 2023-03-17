@@ -34,6 +34,8 @@ class OverviewPage : BasePage<ModelCache>(
             DynamicPanel.ROW_CONTENT_ID,
             modelCache.files.map { Tuple("Path" to it.key.path, "Succeeded" to validate(it.value)) }.toMutableList(),
             20,
+            translator,
+            false,
             { target, tuple ->
                 modelCache.selectedFolder =
                     modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }

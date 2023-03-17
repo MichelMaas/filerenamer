@@ -154,6 +154,8 @@ class DetailPage : BasePage<ModelCache>(
             ROW_CONTENT_ID,
             fileMetaData.map { Tuple("Name" to it.name, "New name" to it.newName) }.toMutableList(),
             maxRows,
+            translator,
+            false,
             { target, tuple ->
                 selected = tuple
                 target.add(this@DetailPage)
