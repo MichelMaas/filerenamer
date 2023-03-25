@@ -2,9 +2,8 @@ package nl.maas.filerenamer.frontend.wicket.pages
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton
 import nl.maas.filerenamer.domain.ExtrapolationResult
-import nl.maas.filerenamer.frontend.ContextProvider
-import nl.maas.filerenamer.frontend.wicket.caches.GoogleTranslator
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
+import nl.maas.filerenamer.frontend.wicket.objects.FileRenamerBasePageProperties
 import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
 import nl.maas.wicket.framework.components.base.DynamicDataTable
 import nl.maas.wicket.framework.components.base.DynamicPanel
@@ -14,9 +13,7 @@ import nl.maas.wicket.framework.pages.BasePage
 import org.apache.wicket.Component
 
 class OverviewPage : BasePage<ModelCache>(
-    ContextProvider.ctx.getBean(ModelCache::class.java),
-    ContextProvider.ctx.getBean(GoogleTranslator::class.java),
-    brandName = "File renamer"
+    FileRenamerBasePageProperties.get()
 ) {
 
     override fun onBeforeRender() {
@@ -42,7 +39,7 @@ class OverviewPage : BasePage<ModelCache>(
                 modelCache.selectedFolder =
                     modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
                 setResponsePage(DetailPage::class.java)
-            }).hover().light().sm()
+            }).hover().sm()
     }
 
     private fun validate(value: ExtrapolationResult): String {

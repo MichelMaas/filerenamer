@@ -3,9 +3,8 @@ package nl.maas.filerenamer.frontend.wicket.pages
 import com.giffing.wicket.spring.boot.context.scan.WicketHomePage
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton
 import nl.maas.filerenamer.domain.enums.SEQUENCE
-import nl.maas.filerenamer.frontend.ContextProvider
-import nl.maas.filerenamer.frontend.wicket.caches.GoogleTranslator
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
+import nl.maas.filerenamer.frontend.wicket.objects.FileRenamerBasePageProperties
 import nl.maas.filerenamer.frontend.wicket.objects.SearchCriteria
 import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
 import nl.maas.wicket.framework.components.base.DynamicFormComponent
@@ -16,11 +15,7 @@ import org.apache.wicket.model.CompoundPropertyModel
 
 @WicketHomePage
 open class SearchPage() :
-    BasePage<ModelCache>(
-        ContextProvider.ctx.getBean(ModelCache::class.java),
-        ContextProvider.ctx.getBean(GoogleTranslator::class.java),
-        brandName = "File renamer"
-    ) {
+    BasePage<ModelCache>(FileRenamerBasePageProperties.get()) {
 
     override fun onBeforeRender() {
         super.onBeforeRender()
