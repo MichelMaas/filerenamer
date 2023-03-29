@@ -15,7 +15,7 @@ class FileRenamerRIABasePageProperties private constructor() : RiaPageProperties
     brandName = "File renamer",
     iconPath = FileUtils.findFile("icon.png"),
     brandPath = FileUtils.findFile("brand.png"),
-    navbarOrientation = NavbarOrientation.HORIZONTAL
+    navbarOrientation = NavbarOrientation.VERTICAL
 ) {
     companion object {
         val instance = FileRenamerRIABasePageProperties()
