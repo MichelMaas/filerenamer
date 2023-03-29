@@ -1,8 +1,10 @@
 package nl.maas.filerenamer.frontend.wicket.caches
 
 import nl.maas.filerenamer.domain.ExtrapolationResult
+import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.frontend.services.FileService
 import nl.maas.filerenamer.frontend.wicket.objects.SearchCriteria
+import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Component
 import java.io.File
 import javax.inject.Inject
@@ -30,6 +32,26 @@ class ModelCache : nl.maas.wicket.framework.services.ModelCache {
 
     fun isFileSelected(): Boolean {
         return selectedFolder != null
+    }
+
+    fun getSelectedResult(): ExtrapolationResult {
+        return if (isFileSelected()) {
+            files[selectedFolder]!!
+        } else {
+            ExtrapolationResult(listOf())
+        }
+    }
+
+    fun getFilesForSelectedFolder(): List<FileMetaData> {
+        return if (isFileSelected()) {
+            files[selectedFolder]!!.files
+        } else {
+            listOf()
+        }
+    }
+
+    fun getSelectedFolderDisplayPath(): String {
+        return selectedFolder?.path?.substringAfter(searchCriteria.folderPath) ?: StringUtils.EMPTY
     }
 
 }

@@ -1,18 +1,14 @@
-package nl.maas.filerenamer.frontend.wicket.pages
+package nl.maas.filerenamer.frontend.wicket.panels
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton
 import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.frontend.services.FileService
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
-import nl.maas.filerenamer.frontend.wicket.objects.FileRenamerBasePageProperties
-import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
 import nl.maas.wicket.framework.components.base.*
-import nl.maas.wicket.framework.components.base.DynamicPanel.Companion.ROW_CONTENT_ID
-import nl.maas.wicket.framework.components.elemental.BaseNavbarButton
 import nl.maas.wicket.framework.components.elemental.SimpleAjaxButton
 import nl.maas.wicket.framework.objects.Tuple
-import nl.maas.wicket.framework.pages.BasePage
+import nl.maas.wicket.framework.panels.RIAPanel
+import nl.maas.wicket.framework.services.Translator
 import org.apache.commons.lang3.StringUtils
 import org.apache.wicket.Component
 import org.apache.wicket.ajax.AjaxRequestTarget
@@ -20,12 +16,16 @@ import org.apache.wicket.model.CompoundPropertyModel
 import org.apache.wicket.model.Model
 import org.apache.wicket.spring.injection.annot.SpringBean
 
-class DetailPage : BasePage<ModelCache>(
-    FileRenamerBasePageProperties.get()
-) {
+class DetailPanel : RIAPanel() {
 
     @SpringBean
-    lateinit var fileService: FileService
+    private lateinit var fileService: FileService
+
+    @SpringBean
+    private lateinit var modelCache: ModelCache
+
+    @SpringBean
+    private lateinit var translator: Translator
 
     private var parentFolder = false
 
@@ -48,7 +48,7 @@ class DetailPage : BasePage<ModelCache>(
             .addOrReplaceComponentToColumn(
                 editorRowName,
                 0,
-                createList(modelCache.files.get(modelCache.selectedFolder)!!.files)
+                createList(modelCache.getFilesForSelectedFolder())
             )
             .addOrReplaceComponentToColumn("ButtonPanel", 0, createApplyButton())
             .addOrReplaceComponentToColumn("ButtonPanel", 1, createBackButton())
@@ -70,26 +70,41 @@ class DetailPage : BasePage<ModelCache>(
 
     private fun createBackButton(): Component {
         return object :
-            SimpleAjaxButton(ROW_CONTENT_ID, "Return", Buttons.Type.Secondary, Size.NORMAL, translator, true) {
+            SimpleAjaxButton(
+                DynamicPanel.ROW_CONTENT_ID,
+                "Return",
+                Buttons.Type.Secondary,
+                Size.NORMAL,
+                translator,
+                true
+            ) {
             override fun onClick(target: AjaxRequestTarget) {
+                switchToPanel(OverviewPanel(), target)
                 modelCache.selectedFolder = null
-                setResponsePage(OverviewPage::class.java)
             }
         }
     }
 
     private fun createApplyButton(): Component {
-        return object : SimpleAjaxButton(ROW_CONTENT_ID, "Apply", Buttons.Type.Primary, Size.NORMAL, translator, true) {
+        return object : SimpleAjaxButton(
+            DynamicPanel.ROW_CONTENT_ID,
+            "Apply",
+            Buttons.Type.Primary,
+            Size.NORMAL,
+            translator,
+            true
+        ) {
             override fun onClick(target: AjaxRequestTarget) {
                 fileService.process(modelCache.files[modelCache.selectedFolder]!!.files)
                 modelCache.refresh()
-                setResponsePage(OverviewPage::class.java)
+                switchToPanel(OverviewPanel(), target)
             }
         }
     }
 
     private fun createParentFolderButton(): Component {
-        return object : Switch(ROW_CONTENT_ID, Model.of(parentFolder), translator.translate("Use parent folder")) {
+        return object :
+            Switch(DynamicPanel.ROW_CONTENT_ID, Model.of(parentFolder), translator.translate("Use parent folder")) {
 
             override fun onUpdate(target: AjaxRequestTarget, modelObject: Boolean) {
                 super.onUpdate(target, modelObject)
@@ -97,7 +112,7 @@ class DetailPage : BasePage<ModelCache>(
                 modelCache.files[modelCache.selectedFolder]!!.files.forEach {
                     it.includeParentMapInName = parentFolder
                 }
-                target.add(this@DetailPage)
+                target.add(this@DetailPanel)
             }
 
         }
@@ -109,7 +124,7 @@ class DetailPage : BasePage<ModelCache>(
 
     private fun createForm(fileMetaData: FileMetaData): Component {
         return object : DynamicFormComponent<FileMetaData>(
-            ROW_CONTENT_ID,
+            DynamicPanel.ROW_CONTENT_ID,
             fileMetaData.name,
             CompoundPropertyModel.of(fileMetaData),
             translator
@@ -124,13 +139,13 @@ class DetailPage : BasePage<ModelCache>(
                 super.onAfterSubmit(target, typedModelObject)
                 selected = null
                 fileService.update(fileMetaData, modelCache.files[modelCache.selectedFolder]!!.sequence.size)
-                target.add(this@DetailPage)
+                target.add(this@DetailPanel)
             }
 
             override fun onAfterCancel(target: AjaxRequestTarget, typedModelObject: FileMetaData) {
                 super.onAfterCancel(target, typedModelObject)
                 selected = null
-                target.add(this@DetailPage)
+                target.add(this@DetailPanel)
             }
 
         }.addSelect(
@@ -144,32 +159,25 @@ class DetailPage : BasePage<ModelCache>(
 
     private fun createList(fileMetaData: List<FileMetaData>, maxRows: Int = 13): Component {
         return DynamicDataTable.get(
-            ROW_CONTENT_ID,
+            DynamicPanel.ROW_CONTENT_ID,
             fileMetaData.map { Tuple("Name" to it.name, "New name" to it.newName) }.toMutableList(),
             maxRows,
             translator,
             false,
             { target, tuple ->
                 selected = tuple
-                target.add(this@DetailPage)
-            }).hover().sm()
+                target.add(this@DetailPanel)
+            }).hover().sm().invertHeader()
 
     }
 
     private fun createOverview(): Component {
         return KeyValueView(
-            ROW_CONTENT_ID,
+            DynamicPanel.ROW_CONTENT_ID,
             translator,
-            "Folder" to modelCache.selectedFolder!!.path.substringAfter(modelCache.searchCriteria.folderPath),
-            "Errors" to modelCache.files.get(modelCache.selectedFolder)!!.failures.failures.size
+            "Folder" to "${modelCache.getSelectedFolderDisplayPath()}",
+            "Errors" to "${modelCache.getSelectedResult().failures.failures.size}"
         )
     }
 
-    override fun createNavBarButtons(): Array<NavbarButton<*>> {
-        return ButtonTypes.values().map { it.toNavBarButton() }.toTypedArray()
-    }
-
-    override fun isButtonActive(button: BaseNavbarButton): Boolean {
-        return true
-    }
 }
