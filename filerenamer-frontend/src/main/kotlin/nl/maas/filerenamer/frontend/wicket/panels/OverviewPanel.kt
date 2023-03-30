@@ -20,7 +20,6 @@ class OverviewPanel : RIAPanel() {
 
     override fun onBeforeRender() {
         super.onBeforeRender()
-        modelCache.refresh()
         addOrReplace(createOverview())
     }
 
@@ -47,5 +46,9 @@ class OverviewPanel : RIAPanel() {
 
     private fun validate(value: ExtrapolationResult): String {
         return if (value.files.any { value.failures.hasFailures(it) }) "NOK" else "OK"
+    }
+
+    override fun isAvailable(): Boolean {
+        return !modelCache.isEmpty()
     }
 }

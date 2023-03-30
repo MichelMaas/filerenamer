@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = BootstrapProperties.PROPERTY_PREFIX)
 class BootstrapProperties : BootstrapSettings() {
     var isEnabled = true
-    var theme: BootswatchTheme = BootswatchTheme.Sandstone
+    var theme: BootswatchTheme = BootswatchTheme.Lumen
 
     companion object {
         const val PROPERTY_PREFIX = "nl.maas.filerenamer.frontend.wicket.config"
