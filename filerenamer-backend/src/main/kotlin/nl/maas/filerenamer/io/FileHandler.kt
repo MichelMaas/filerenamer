@@ -40,6 +40,7 @@ class FileHandler {
         if (files.isNotEmpty()) {
             map.put(path, files.filter { file -> !".file-renamer-settings.xml".equals(file.name) });
         }
+
         dirs.map { file -> searchFilesIn(file.absolutePath) }.forEach { dirMap -> map.putAll(dirMap) }
         return map
     }

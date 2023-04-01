@@ -20,6 +20,7 @@ class OverviewPanel : RIAPanel() {
 
     override fun onBeforeRender() {
         super.onBeforeRender()
+        modelCache.refresh()
         addOrReplace(createOverview())
     }
 

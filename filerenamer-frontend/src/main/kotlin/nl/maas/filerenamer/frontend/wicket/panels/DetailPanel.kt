@@ -96,7 +96,6 @@ class DetailPanel : RIAPanel() {
         ) {
             override fun onClick(target: AjaxRequestTarget) {
                 fileService.process(modelCache.files[modelCache.selectedFolder]!!.files)
-                modelCache.refresh()
                 switchToPanel(OverviewPanel(), target)
             }
         }

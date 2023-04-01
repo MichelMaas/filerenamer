@@ -35,7 +35,6 @@ class SearchPanel : RIAPanel() {
 
             override fun onSubmitCompleted(target: AjaxRequestTarget, typedModelObject: SearchCriteria) {
                 super.onSubmitCompleted(target, typedModelObject)
-                modelCache.refresh()
                 switchToPanel(OverviewPanel(), target)
             }
         }.addTextBox("folderPath", "Path")
