@@ -10,10 +10,5 @@
         <module name="filerenamer-frontend" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="filerenamer" target="11" />
-      <module name="filerenamer-backend" target="11" />
-      <module name="filerenamer-frontend" target="11" />
-    </bytecodeTargetLevel>
   </component>
 </project>

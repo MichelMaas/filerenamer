@@ -7,7 +7,6 @@ import nl.maas.filerenamer.frontend.wicket.panels.SearchPanel
 import nl.maas.filerenamer.io.FileUtils
 import nl.maas.wicket.framework.objects.RiaPageProperties
 import nl.maas.wicket.framework.objects.enums.NavbarOrientation
-import nl.maas.wicket.framework.objects.enums.NavbarType
 
 class FileRenamerRIABasePageProperties private constructor() : RiaPageProperties<ModelCache>(
     SearchPanel(),
@@ -16,7 +15,7 @@ class FileRenamerRIABasePageProperties private constructor() : RiaPageProperties
     brandName = "File renamer",
     iconPath = FileUtils.findFile("icon.png"),
     brandPath = FileUtils.findFile("brand.png"),
-    navbarType = NavbarType.DARK,
+//    navbarType = NavbarType.DARK,
     navbarOrientation = NavbarOrientation.VERTICAL
 ) {
     companion object {

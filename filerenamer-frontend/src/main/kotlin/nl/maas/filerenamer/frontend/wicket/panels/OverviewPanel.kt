@@ -29,19 +29,21 @@ class OverviewPanel : RIAPanel() {
     }
 
     private fun setUpTable(): Component {
+        val tuples =
+            modelCache.files.map { Tuple("Path" to it.key.path, "Succeeded" to validate(it.value)) }.toMutableList()
         return DynamicDataTable.get(
             DynamicPanel.ROW_CONTENT_ID,
-            modelCache.files.map { Tuple("Path" to it.key.path, "Succeeded" to validate(it.value)) }.toMutableList(),
+            tuples,
             20,
             translator,
-            false,
+            onTupleClick =
             { target, tuple ->
                 modelCache.selectedFolder =
                     modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
                 modelCache.selectedFolder =
                     modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
                 switchToPanel(DetailPanel(), target)
-            }).hover().sm()
+            }).hover().sm().invertHeader()
     }
 
     private fun validate(value: ExtrapolationResult): String {

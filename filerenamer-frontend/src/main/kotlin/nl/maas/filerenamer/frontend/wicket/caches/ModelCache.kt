@@ -1,5 +1,7 @@
 package nl.maas.filerenamer.frontend.wicket.caches
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import nl.maas.filerenamer.domain.ExtrapolationResult
 import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.frontend.services.FileService
@@ -24,10 +26,14 @@ class ModelCache : nl.maas.wicket.framework.services.ModelCache {
     }
 
     override fun refresh() {
-        files = fileService.findAndProcessFrom(
-            searchCriteria.folderPath,
-            searchCriteria.sequence
-        )
+        files = runBlocking {
+            async {
+                fileService.findAndProcessFrom(
+                    searchCriteria.folderPath,
+                    searchCriteria.sequence
+                )
+            }.await()
+        }
     }
 
     fun isFileSelected(): Boolean {

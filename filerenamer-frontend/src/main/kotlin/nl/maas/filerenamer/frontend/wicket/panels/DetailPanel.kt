@@ -163,8 +163,7 @@ class DetailPanel : RIAPanel() {
             fileMetaData.map { Tuple("Name" to it.name, "New name" to it.newName) }.toMutableList(),
             maxRows,
             translator,
-            false,
-            { target, tuple ->
+            onTupleClick = { target, tuple ->
                 selected = tuple
                 target.add(this@DetailPanel)
             }).hover().sm().invertHeader()
