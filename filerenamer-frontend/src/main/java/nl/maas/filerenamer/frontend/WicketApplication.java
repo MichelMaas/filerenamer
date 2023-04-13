@@ -1,6 +1,6 @@
 package nl.maas.filerenamer.frontend;
 
-import nl.maas.filerenamer.frontend.wicket.pages.SearchPage;
+import nl.maas.filerenamer.frontend.wicket.pages.MainPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.resource.FileSystemResourceReference;
@@ -44,6 +44,6 @@ public class WicketApplication extends WebApplication {
 
     @Override
     public Class<? extends Page> getHomePage() {
-        return SearchPage.class;
+        return MainPage.class;
     }
 }

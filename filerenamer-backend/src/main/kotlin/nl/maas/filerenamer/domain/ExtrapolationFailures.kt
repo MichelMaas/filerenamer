@@ -6,7 +6,7 @@ import java.io.Serializable
 data class ExtrapolationFailures(val failures: MutableMap<String, MutableSet<ExtrapolationFailure<out Serializable>>>) :
     Serializable {
 
-    constructor() : this(HashMap())
+    constructor() : this(mutableMapOf())
 
     enum class FailureType {
         TooMany,

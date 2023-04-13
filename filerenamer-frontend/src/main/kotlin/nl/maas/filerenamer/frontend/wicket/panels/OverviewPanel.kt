@@ -1,23 +1,26 @@
-package nl.maas.filerenamer.frontend.wicket.pages
+package nl.maas.filerenamer.frontend.wicket.panels
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton
 import nl.maas.filerenamer.domain.ExtrapolationResult
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
-import nl.maas.filerenamer.frontend.wicket.objects.FileRenamerBasePageProperties
-import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
 import nl.maas.wicket.framework.components.base.DynamicDataTable
 import nl.maas.wicket.framework.components.base.DynamicPanel
-import nl.maas.wicket.framework.components.elemental.BaseNavbarButton
 import nl.maas.wicket.framework.objects.Tuple
-import nl.maas.wicket.framework.pages.BasePage
+import nl.maas.wicket.framework.panels.RIAPanel
+import nl.maas.wicket.framework.services.Translator
 import org.apache.wicket.Component
+import org.apache.wicket.spring.injection.annot.SpringBean
 
-class OverviewPage : BasePage<ModelCache>(
-    FileRenamerBasePageProperties.get()
-) {
+class OverviewPanel : RIAPanel() {
+
+    @SpringBean
+    private lateinit var modelCache: ModelCache
+
+    @SpringBean
+    private lateinit var translator: Translator
 
     override fun onBeforeRender() {
         super.onBeforeRender()
+        modelCache.refresh()
         addOrReplace(createOverview())
     }
 
@@ -27,31 +30,28 @@ class OverviewPage : BasePage<ModelCache>(
     }
 
     private fun setUpTable(): Component {
+        val tuples =
+            modelCache.files.map { Tuple("Path" to it.key.path, "Succeeded" to validate(it.value)) }.toMutableList()
         return DynamicDataTable.get(
             DynamicPanel.ROW_CONTENT_ID,
-            modelCache.files.map { Tuple("Path" to it.key.path, "Succeeded" to validate(it.value)) }.toMutableList(),
+            tuples,
             20,
             translator,
-            false,
+            onTupleClick =
             { target, tuple ->
                 modelCache.selectedFolder =
                     modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
                 modelCache.selectedFolder =
                     modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
-                setResponsePage(DetailPage::class.java)
-            }).hover().sm()
+                switchToPanel(DetailPanel(), target)
+            }).hover().sm().invertHeader()
     }
 
     private fun validate(value: ExtrapolationResult): String {
         return if (value.files.any { value.failures.hasFailures(it) }) "NOK" else "OK"
     }
 
-
-    override fun createNavBarButtons(): Array<NavbarButton<*>> {
-        return ButtonTypes.values().map { it.toNavBarButton() }.toTypedArray()
-    }
-
-    override fun isButtonActive(button: BaseNavbarButton): Boolean {
-        return !button.buttonType.equals(ButtonTypes.OVERVIEW)
+    override fun isAvailable(): Boolean {
+        return !modelCache.isEmpty()
     }
 }

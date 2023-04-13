@@ -9,15 +9,18 @@ data class ExtrapolationResult(
     var warnings: List<Warning>,
     val failures: ExtrapolationFailures
 ) : Serializable {
-    constructor(_files: List<FileMetaData>) : this(_files, ArrayList(), ExtrapolationFailures(HashMap()))
+    constructor(_files: List<FileMetaData>) : this(_files, ArrayList(), ExtrapolationFailures(mutableMapOf()))
 
     val commonalities: Set<String>;
 
     init {
-        commonalities =
+        commonalities = if (_files.isEmpty()) {
+            setOf()
+        } else {
             _files.first().extrapolatedName.filter { _files.all { fl -> fl.extrapolatedName.contains(it) } }
                 .filter { !it.isNullOrBlank() }.distinct()
                 .toSet()
+        }
     }
 
     var sequence: List<Int> = listOf()

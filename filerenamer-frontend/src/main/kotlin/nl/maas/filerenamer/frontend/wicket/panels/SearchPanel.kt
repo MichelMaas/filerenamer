@@ -1,21 +1,21 @@
-package nl.maas.filerenamer.frontend.wicket.pages
+package nl.maas.filerenamer.frontend.wicket.panels
 
-import com.giffing.wicket.spring.boot.context.scan.WicketHomePage
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton
 import nl.maas.filerenamer.domain.enums.SEQUENCE
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
-import nl.maas.filerenamer.frontend.wicket.objects.FileRenamerBasePageProperties
 import nl.maas.filerenamer.frontend.wicket.objects.SearchCriteria
-import nl.maas.filerenamer.frontend.wicket.objects.enums.ButtonTypes
 import nl.maas.wicket.framework.components.base.DynamicFormComponent
-import nl.maas.wicket.framework.components.elemental.BaseNavbarButton
-import nl.maas.wicket.framework.pages.BasePage
+import nl.maas.wicket.framework.panels.RIAPanel
+import nl.maas.wicket.framework.services.Translator
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.model.CompoundPropertyModel
+import org.apache.wicket.spring.injection.annot.SpringBean
 
-@WicketHomePage
-open class SearchPage() :
-    BasePage<ModelCache>(FileRenamerBasePageProperties.get()) {
+class SearchPanel : RIAPanel() {
+    @SpringBean
+    private lateinit var modelCache: ModelCache
+
+    @SpringBean
+    private lateinit var translator: Translator
 
     override fun onBeforeRender() {
         super.onBeforeRender()
@@ -27,23 +27,18 @@ open class SearchPage() :
             "panel",
             "Search",
             CompoundPropertyModel.of(modelCache.searchCriteria),
-            translator,
-            this
+            translator
         ) {
             override fun onAfterSubmit(target: AjaxRequestTarget, typedModelObject: SearchCriteria) {
                 super.onAfterSubmit(target, typedModelObject)
-                modelCache.refresh()
-                setResponsePage(OverviewPage::class.java)
+            }
+
+            override fun onSubmitCompleted(target: AjaxRequestTarget, typedModelObject: SearchCriteria) {
+                super.onSubmitCompleted(target, typedModelObject)
+                switchToPanel(OverviewPanel(), target)
             }
         }.addTextBox("folderPath", "Path")
             .addSelect("sequence", "Sequence", SEQUENCE.values().toList(), modelCache.searchCriteria.sequence)
     }
 
-    override fun createNavBarButtons(): Array<NavbarButton<*>> {
-        return ButtonTypes.values().map { it.toNavBarButton() }.toTypedArray()
-    }
-
-    override fun isButtonActive(button: BaseNavbarButton): Boolean {
-        return !button.buttonType.equals(ButtonTypes.SEARCH)
-    }
 }
