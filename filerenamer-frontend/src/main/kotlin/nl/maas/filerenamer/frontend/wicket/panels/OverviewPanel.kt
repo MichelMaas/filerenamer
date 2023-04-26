@@ -36,15 +36,13 @@ class OverviewPanel : RIAPanel() {
             DynamicPanel.ROW_CONTENT_ID,
             tuples,
             20,
-            translator,
+            translator = translator,
             onTupleClick =
             { target, tuple ->
                 modelCache.selectedFolder =
                     modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
-                modelCache.selectedFolder =
-                    modelCache.files.keys.first { it.path.equals(tuple.columns.values.first()) }
                 switchToPanel(DetailPanel(), target)
-            }).hover().sm().invertHeader()
+            }, translateContent = arrayOf("None")).hover().sm().invertHeader()
     }
 
     private fun validate(value: ExtrapolationResult): String {

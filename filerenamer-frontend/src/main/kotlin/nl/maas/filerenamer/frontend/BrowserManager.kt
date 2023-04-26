@@ -124,14 +124,9 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
     private fun startWebDriver(url: String) {
         val options = EdgeOptions()
         options.addArguments("--app=$url")
-            .setExperimentalOption("useAutomationExtension", false)
             .setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"))
             .addArguments("--remote-allow-origins=*")
             .addArguments("-inprivate")
-
-        options.setCapability("useAutomationExtension", false)
-        options.setCapability("excludeSwitches", Collections.singletonList("enable-automation"))
-
 
         try {
             driver = EdgeDriver(options)

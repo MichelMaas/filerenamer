@@ -8,7 +8,7 @@ import nl.maas.filerenamer.frontend.wicket.panels.SearchPanel
 import nl.maas.wicket.framework.pages.RIAPage
 
 @WicketHomePage
-class MainPage : RIAPage<ModelCache>(FileRenamerRIABasePageProperties.get()) {
+class MainPage : RIAPage<ModelCache>(FileRenamerRIABasePageProperties()) {
     init {
         registerPanels(
             "Search" to SearchPanel(),

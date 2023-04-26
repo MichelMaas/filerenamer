@@ -8,20 +8,11 @@ import nl.maas.filerenamer.io.FileUtils
 import nl.maas.wicket.framework.objects.RiaPageProperties
 import nl.maas.wicket.framework.objects.enums.NavbarOrientation
 
-class FileRenamerRIABasePageProperties private constructor() : RiaPageProperties<ModelCache>(
+class FileRenamerRIABasePageProperties() : RiaPageProperties<ModelCache>(
+    "File renamer",
     SearchPanel(),
     ContextProvider.ctx.getBean(ModelCache::class.java),
     ContextProvider.ctx.getBean(GoogleTranslator::class.java),
     brandName = "File renamer",
-    iconPath = FileUtils.findFile("icon.png"),
-    brandPath = FileUtils.findFile("brand.png"),
-//    navbarType = NavbarType.DARK,
     navbarOrientation = NavbarOrientation.VERTICAL
-) {
-    companion object {
-        val instance = FileRenamerRIABasePageProperties()
-        fun get(): FileRenamerRIABasePageProperties {
-            return instance
-        }
-    }
-}
+)

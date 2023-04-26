@@ -157,15 +157,17 @@ class DetailPanel : RIAPanel() {
     }
 
     private fun createList(fileMetaData: List<FileMetaData>, maxRows: Int = 13): Component {
+        val tuples = fileMetaData.map { Tuple("Name" to it.name, "New name" to it.newName) }.toMutableList()
         return DynamicDataTable.get(
             DynamicPanel.ROW_CONTENT_ID,
-            fileMetaData.map { Tuple("Name" to it.name, "New name" to it.newName) }.toMutableList(),
+            tuples,
             maxRows,
-            translator,
+            translator = translator,
             onTupleClick = { target, tuple ->
                 selected = tuple
                 target.add(this@DetailPanel)
-            }).hover().sm().invertHeader()
+            }, showClicked = true, translateContent = arrayOf("none")
+        ).hover().sm().invertHeader()
 
     }
 
