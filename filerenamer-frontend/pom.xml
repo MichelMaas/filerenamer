@@ -16,13 +16,18 @@
         <wicket-bootstrap.version>6.0.2</wicket-bootstrap.version>
         <wicket-bootstrap-less.version>4.0.4</wicket-bootstrap-less.version>
         <javafx.version>11</javafx.version>
-        <wicket.framework.lib.version>2023.17</wicket.framework.lib.version>
+        <wicket.framework.lib.version>2023.19</wicket.framework.lib.version>
     </properties>
 
     <repositories>
         <repository>
             <id>jitpack</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>repsy</id>
+            <name>My Private Maven Repository on Repsy</name>
+            <url>https://repo.repsy.io/mvn/michelmaas/default</url>
         </repository>
     </repositories>
     <dependencies>
@@ -186,9 +191,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>3.6.4</version>
+        </dependency>
+
+        <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-themes</artifactId>
             <version>${wicket-bootstrap.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.webjars</groupId>
+                    <artifactId>jquery</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

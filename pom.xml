@@ -23,7 +23,7 @@
         </connection>
         <developerConnection>scm:git:ssh://git@bitbucket.org/mmaas/fx_analyzer.git
         </developerConnection>
-        <url>https://mmaas@bitbucket.org/mmaas/bank-book.git
+        <url>https://mmaas@bitbucket.org/mmaas/filerenamer.git
         </url>
     </scm>
 
