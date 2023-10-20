@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class SequenceTimeStampExtrapolator : SequenceExtrapolator {
+class SequenceTimeExtrapolator : SequenceExtrapolator {
     override fun findSequenceForFiles(fileData: List<FileMetaData>): ExtrapolationResult {
         fileData.forEach { fileMetaData -> fileMetaData.sequence = getDateFor(fileMetaData.file.toPath()) }
 
@@ -18,6 +18,6 @@ class SequenceTimeStampExtrapolator : SequenceExtrapolator {
     private fun getDateFor(path: Path): String {
         var attr = Files.readAttributes(path, BasicFileAttributes::class.java)
         val dateTime = LocalDateTime.ofInstant(attr.creationTime().toInstant(), ZoneId.systemDefault());
-        return DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(dateTime)
+        return DateTimeFormatter.ofPattern("HHmmssS").format(dateTime)
     }
 }

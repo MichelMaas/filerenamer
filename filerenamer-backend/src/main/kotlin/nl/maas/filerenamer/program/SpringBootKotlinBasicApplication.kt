@@ -78,7 +78,7 @@ fun requestManualSequence(failures: Set<ExtrapolationFailure<Int>>) {
 }
 
 private fun requestSequenceExtrapolator(): SequenceExtrapolator {
-    print("Do the files you wish to rename have a (N)umerical sequence, or should they be sequenced by (D)ate?: ")
+    print("Do the files you wish to rename have a (N)umerical sequence, or should they be sequenced by (D)ate, (T)ime or Time(s)tamp?: ")
     val sequence = SEQUENCE.forValue(readLine()!!)
     var sequenceExtrapolator = SequenceExtrapolator.instance(sequence)
     return sequenceExtrapolator

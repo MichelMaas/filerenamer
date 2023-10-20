@@ -14,6 +14,7 @@ interface SequenceExtrapolator {
                 SEQUENCE.NUMBER -> SequenceNumberExtrapolator()
                 SEQUENCE.DATE -> SequenceDateExtrapolator()
                 SEQUENCE.TIMESTAMP -> SequenceTimeStampExtrapolator()
+                SEQUENCE.TIME -> SequenceTimeExtrapolator()
             }
         }
     }
