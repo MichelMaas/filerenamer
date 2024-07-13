@@ -33,6 +33,7 @@ gradle-app.setting
 
 .idea
 *.iml
+.fleet/
 
 # User-specific stuff
 .idea/**/workspace.xml
