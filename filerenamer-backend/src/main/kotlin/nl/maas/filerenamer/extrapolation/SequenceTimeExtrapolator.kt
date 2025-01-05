@@ -17,7 +17,7 @@ class SequenceTimeExtrapolator : SequenceExtrapolator {
 
     private fun getDateFor(path: Path): String {
         var attr = Files.readAttributes(path, BasicFileAttributes::class.java)
-        val dateTime = LocalDateTime.ofInstant(attr.creationTime().toInstant(), ZoneId.systemDefault());
-        return DateTimeFormatter.ofPattern("HHmmssS").format(dateTime)
+        val dateTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
+        return DateTimeFormatter.ofPattern("HHmmss.nnn").format(dateTime)
     }
 }

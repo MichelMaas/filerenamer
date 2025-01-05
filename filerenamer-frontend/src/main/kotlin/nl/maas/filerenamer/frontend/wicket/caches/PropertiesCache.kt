@@ -12,16 +12,18 @@ import kotlin.reflect.KClass
 
 @Component
 class PropertiesCache {
-    protected val i10N: I10N
-    val translator: Translator
+    protected final val i10N: I10N
+    final val translator: Translator
+
+    init {
+        i10N = JsonUtils.load(FileUtils.findFile("I10N.json").toString(), I10N::class.java)!!
+    }
+
     val iconReference =
         FileSystemResourceReference("favicon", Path.of(FileUtils.findFile("icon.png")))
     val brandReference =
         FileSystemResourceReference("brand", Path.of(FileUtils.findFile("brand.png")))
 
-    init {
-        i10N = JsonUtils.load(FileUtils.findFile("I10N.json").toString(), I10N::class.java)!!
-    }
 
     constructor() {
         translator = Translator(this)

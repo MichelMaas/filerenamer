@@ -41,8 +41,6 @@ public class WicketApplication extends WebApplication {
         FileSystemResourceReference favicon = new FileSystemResourceReference("favicon", Path.of(this.getClass().getResource("/open/images/icon.png").getPath()));
         mountResource("/images/icon.png", favicon);
         final ConfigurableApplicationContext[] ctx = {ContextProvider.ctx};
-//        BrowserManager manager = ctx[0].getBean(BrowserManager.class);
-//        manager.open("http://localhost:8080");
     }
 
     @Override
