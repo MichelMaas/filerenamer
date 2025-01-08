@@ -1,5 +1,6 @@
 package nl.maas.filerenamer.io
 
+import nl.maas.filerenamer.errors.FilerenamerBackendError
 import java.io.File
 import java.io.FileFilter
 import java.nio.file.Files
@@ -11,7 +12,7 @@ class FileHandler {
     fun searchFilesIn(path: String): Map<File, List<File>> {
         val headDir = Paths.get(path).toFile()
         if (!headDir.exists())
-            throw IllegalStateException("File ${path} not found!")
+            throw FilerenamerBackendError("File ${path} not found!", IllegalStateException("File ${path} not found!"))
         var files = HashMap<File, List<File>>()
         if (headDir.isDirectory)
             files.putAll(searchFilesIn(headDir))

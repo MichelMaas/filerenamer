@@ -10,11 +10,6 @@
     <artifactId>filerenamer-frontend</artifactId>
 
     <properties>
-        <wicketstuff.version>9.5.0</wicketstuff.version>
-        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <wicket.version>9.12.0</wicket.version>
-        <wicket-bootstrap-less.version>4.0.4</wicket-bootstrap-less.version>
-        <javafx.version>11</javafx.version>
     </properties>
 
     <repositories>
@@ -30,6 +25,10 @@
     </repositories>
     <dependencies>
         <dependency>
+            <groupId>nl.maas</groupId>
+            <artifactId>graal-base-support</artifactId>
+        </dependency>
+        <dependency>
             <groupId>nl.maas.filerenamer</groupId>
             <artifactId>filerenamer-backend</artifactId>
             <version>${project.version}</version>
@@ -37,16 +36,6 @@
         <dependency>
             <groupId>com.giffing.wicket.spring.boot.starter</groupId>
             <artifactId>wicket-spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-context</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-autoconfigure</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wicketstuff</groupId>
@@ -56,7 +45,6 @@
             <groupId>com.github.therealbush</groupId>
             <artifactId>translator</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.wicketstuff/wicketstuff-progressbar -->
         <dependency>
             <groupId>org.wicketstuff</groupId>
             <artifactId>wicketstuff-progressbar</artifactId>
@@ -66,10 +54,6 @@
             <artifactId>wicket-chartjs</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -112,22 +96,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chrome-driver</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-firefox-driver</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-        </dependency>
-
 
         <!--        Bootstrap-->
         <dependency>
@@ -207,5 +175,5 @@
             </resource>
         </resources>
     </build>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 </project>

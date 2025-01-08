@@ -16,7 +16,8 @@ class PropertiesCache {
     final val translator: Translator
 
     init {
-        i10N = JsonUtils.load(FileUtils.findFile("I10N.json").toString(), I10N::class.java)!!
+        i10N = JsonUtils.load(FileUtils.findFile("I10N.json").toString(), I10N::class.java)
+            ?: JsonUtils.loadResource("properties/I10N.json", I10N::class.java)
     }
 
     val iconReference =

@@ -1,8 +1,10 @@
 package nl.maas.filerenamer.frontend.wicket.objects
 
 import nl.maas.wicket.framework.pages.BasePage
+import org.springframework.aot.hint.annotation.Reflective
 import kotlin.reflect.KClass
 
+@Reflective
 data class I10N(
     val languages: List<Language>
 ) {

@@ -9,6 +9,7 @@ import java.io.InputStreamReader
 
 class JsonUtils private constructor() {
     companion object {
+        
         fun <T> load(path: String, clazz: Class<T>): T? {
             val jsonFile = File(path)
             return if (jsonFile.exists()) Gson().fromJson(
