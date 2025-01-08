@@ -13,7 +13,6 @@ class MainPage : RIAPage<ModelCache>(FileRenamerRIABasePageProperties()) {
         registerPanels(
             "Search" to SearchPanel(),
             "Overview" to OverviewPanel()
-//            "Details" to DetailPanel()
         )
     }
 }

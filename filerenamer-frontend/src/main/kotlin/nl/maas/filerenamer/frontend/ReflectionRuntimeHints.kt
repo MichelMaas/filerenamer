@@ -8,6 +8,6 @@ import org.springframework.context.annotation.ImportRuntimeHints
 
 @ImportRuntimeHints(ReflectionRuntimeHints::class)
 @Configuration
-class ReflectionRuntimeHints : ReflectionRegistrator(I10N::class, Language::class) {
+class ReflectionRuntimeHints : ReflectionRegistrator(I10N::class, Language::class, Page::class) {
 
 }
