@@ -6,6 +6,7 @@ import nl.maas.filerenamer.domain.ExtrapolationResult
 import nl.maas.filerenamer.extrapolation.FileMetaData
 import nl.maas.filerenamer.frontend.services.FileService
 import nl.maas.filerenamer.frontend.wicket.objects.SearchCriteria
+import nl.maas.wicket.framework.objects.Tuple
 import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Component
 import java.io.File
@@ -17,12 +18,14 @@ class ModelCache : nl.maas.wicket.framework.services.ModelCache {
     var selectedFolder: File? = null
     var files: Map<File, ExtrapolationResult> = mapOf()
     var searchCriteria: SearchCriteria = SearchCriteria()
+    var foundEpisodes: Map<String, List<String>> = mapOf()
+    var series: MutableList<Tuple> = mutableListOf()
 
     @Inject
     private lateinit var fileService: FileService
 
     override fun isEmpty(): Boolean {
-        return files.isNullOrEmpty()
+        return files.isEmpty() && foundEpisodes.isEmpty()
     }
 
     override fun refresh() {

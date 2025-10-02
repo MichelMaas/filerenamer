@@ -16,7 +16,7 @@
         <wicket-bootstrap.version>6.0.2</wicket-bootstrap.version>
         <wicket-bootstrap-less.version>4.0.4</wicket-bootstrap-less.version>
         <javafx.version>11</javafx.version>
-        <wicket.framework.lib.version>2024.03</wicket.framework.lib.version>
+        <wicket.framework.lib.version>2025.01-SNAPSHOT</wicket.framework.lib.version>
     </properties>
 
     <repositories>
@@ -36,6 +36,7 @@
             <artifactId>filerenamer-backend</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.giffing.wicket.spring.boot.starter</groupId>
             <artifactId>wicket-spring-boot-starter</artifactId>
@@ -132,6 +133,11 @@
             <artifactId>wicket.framework.lib</artifactId>
             <version>${wicket.framework.lib.version}</version>
         </dependency>
+        <dependency>
+            <groupId>nl.maas.framework</groupId>
+            <artifactId>easy.torrent.framework</artifactId>
+            <version>${wicket.framework.lib.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -141,27 +147,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chrome-driver</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-firefox-driver -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-firefox-driver</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>4.0.0</version>
         </dependency>
 
 
@@ -238,6 +223,25 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.uci.ics</groupId>
+            <artifactId>crawler4j</artifactId>
+            <version>4.4.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sleepycat</groupId>
+                    <artifactId>je</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.sleepycat/je -->
+        <dependency>
+            <groupId>com.sleepycat</groupId>
+            <artifactId>je</artifactId>
+            <version>5.0.73</version>
         </dependency>
     </dependencies>
 
@@ -385,31 +389,6 @@
                 <targetPath>../bin</targetPath>
                 <filtering>true</filtering>
             </resource>
-            <!--            <resource>-->
-            <!--                <directory>lib</directory>-->
-            <!--                <targetPath>../lib</targetPath>-->
-            <!--                <filtering>true</filtering>-->
-            <!--            </resource>-->
-            <!--            <resource>-->
-            <!--                <filtering>false</filtering>-->
-            <!--                <directory>src/main/java</directory>-->
-            <!--                <includes>-->
-            <!--                    <include>**</include>-->
-            <!--                </includes>-->
-            <!--                <excludes>-->
-            <!--                    <exclude>**/*.java</exclude>-->
-            <!--                </excludes>-->
-            <!--            </resource>-->
-            <!--            <resource>-->
-            <!--                <filtering>false</filtering>-->
-            <!--                <directory>src/main/kotlin</directory>-->
-            <!--                <includes>-->
-            <!--                    <include>**</include>-->
-            <!--                </includes>-->
-            <!--                <excludes>-->
-            <!--                    <exclude>**/*.kt</exclude>-->
-            <!--                </excludes>-->
-            <!--            </resource>-->
         </resources>
     </build>
 

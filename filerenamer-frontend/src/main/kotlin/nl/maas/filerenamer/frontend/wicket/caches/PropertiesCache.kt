@@ -11,21 +11,14 @@ import java.nio.file.Path
 import kotlin.reflect.KClass
 
 @Component
-class PropertiesCache {
-    protected val i10N: I10N
-    val translator: Translator
+class PropertiesCache() {
+    protected val i10N: I10N = JsonUtils.load(FileUtils.findFile("I10N.json").toString(), I10N::class.java)!!
+    final val translator: Translator = Translator(this)
+
     val iconReference =
         FileSystemResourceReference("favicon", Path.of(FileUtils.findFile("icon.png")))
     val brandReference =
         FileSystemResourceReference("brand", Path.of(FileUtils.findFile("brand.png")))
-
-    init {
-        i10N = JsonUtils.load(FileUtils.findFile("I10N.json").toString(), I10N::class.java)!!
-    }
-
-    constructor() {
-        translator = Translator(this)
-    }
 
     inner class Translator(
         val propertiesCache: PropertiesCache,
