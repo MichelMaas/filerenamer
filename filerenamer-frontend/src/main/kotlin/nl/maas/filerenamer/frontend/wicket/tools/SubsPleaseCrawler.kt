@@ -1,6 +1,11 @@
 package nl.maas.filerenamer.frontend.wicket.tools
 
+import nl.maas.filerenamer.frontend.objects.data.Batch
+import nl.maas.filerenamer.frontend.objects.data.Episode
+import nl.maas.filerenamer.frontend.objects.data.Show
 import nl.maas.wicket.framework.viewer.ScrapeViewer
+import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import org.springframework.stereotype.Component
 
 private const val MAIN_URL = "https://subsplease.org/shows"
@@ -10,17 +15,20 @@ class SubsPleaseCrawler {
 
     private final val HEADLESS = true
 
-    fun getAvailableAnime(): Map<String, String> {
+    fun getAvailableAnime(): List<Show> {
         val viewer = ScrapeViewer.get(HEADLESS)
         viewer.startBrowser(MAIN_URL)
-        val showLinks = getShowLinks(viewer)
-        val mutableMap: MutableMap<String, String> = mutableMapOf()
-        showLinks.forEach { link ->
-            val numberOfEpisodes = getNumberOfEpisodes(viewer, link.toPair())
-            mutableMap.put(link.key, "$numberOfEpisodes")
-        }
+        val shows = getShows(viewer)
         viewer.close()
-        return mutableMap
+        return shows
+    }
+
+    fun getAvailableDownloadables(show: Show): Show {
+        val viewer = ScrapeViewer.get(HEADLESS)
+        viewer.startBrowser(show.showHome)
+        show.batches = getBatchesForAnime(viewer)
+        show.episodes = getEpisodesForAnime(viewer)
+        return show
     }
 
     private fun getNumberOfEpisodes(viewer: ScrapeViewer, link: Pair<String, String>): Int {
@@ -33,35 +41,40 @@ class SubsPleaseCrawler {
         return size
     }
 
-    fun getEpisodesForAnime(name: String): List<String> {
-        val viewer = ScrapeViewer.get(HEADLESS)
-        viewer.startBrowser(MAIN_URL)
-        val link = viewer.findElementsByTagName("a").first { it.text.equals(name) }.getDomAttribute("href").toString()
-        viewer.navigateTo(link)
+    private fun getEpisodesForAnime(viewer: ScrapeViewer): List<Episode> {
         val episodes =
-            viewer.findElementsByClass("episode-title").filterNot { it.text.contains("batch", true) }.map { it.text }
-        viewer.close()
+            viewer.findElementsByClass("show-release-item").filterNot { it.text.contains("batch", true) }
+                .map {
+                    Episode(
+                        it.findElement(By.className("episode-title")).text,
+                        it.findElements(By.tagName("a")).firstOrNull { is720pMagnetLink(it) }?.getDomAttribute("href")
+                            ?: it.findElement(By.tagName("a")).getDomAttribute("href") ?: ""
+                    )
+                }
         return episodes
     }
 
-    fun getBatchesForAnime(name: String): List<String> {
-        val viewer = ScrapeViewer.get(HEADLESS)
-        viewer.startBrowser(MAIN_URL)
-        val link = "${MAIN_URL.removeSuffix("/shows")}/${
-            viewer.findElementsByTagName("a").first { it.text.equals(name) }.getDomAttribute("href").toString()
-        }"
-        viewer.navigateTo(link)
+    private fun getBatchesForAnime(viewer: ScrapeViewer): List<Batch> {
         val batches =
-            viewer.findElementsByClass("episode-title").filter { it.text.contains("batch", true) }.map { it.text }
-        viewer.close()
+            viewer.findElementsByClass("show-release-item").filter { it.text.contains("batch", true) }
+                .map {
+                    Batch(
+                        it.findElement(By.className("episode-title")).text,
+                        it.findElements(By.tagName("a")).firstOrNull { is720pMagnetLink(it) }?.getDomAttribute("href")
+                            ?: it.findElement(By.tagName("a")).getDomAttribute("href") ?: ""
+                    )
+                }
         return batches
     }
 
-    private fun getShowLinks(viewer: ScrapeViewer): Map<String, String> {
+    private fun is720pMagnetLink(element: WebElement): Boolean =
+        element.getDomAttribute("href")?.startsWith("magnet:") ?: false && element.getDomAttribute("href")
+            ?.contains("720p") ?: false
+
+    private fun getShows(viewer: ScrapeViewer): List<Show> {
         viewer.navigateTo(MAIN_URL)
         val anime =
             viewer.findElementsByTagName("a").filter { it.getDomAttribute("href")?.startsWith("/shows") ?: false }
-        val associate = anime.associate { it.text to "https://subsplease.org/${it.getDomAttribute("href")!!}" }
-        return associate
+        return anime.map { Show(it.text, "https://subsplease.org/${it.getDomAttribute("href")!!}") }
     }
 }

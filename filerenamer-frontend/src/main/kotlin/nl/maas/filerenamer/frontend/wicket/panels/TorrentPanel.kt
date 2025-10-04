@@ -3,6 +3,7 @@ package nl.maas.filerenamer.frontend.wicket.panels
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons
 import nl.maas.filerenamer.frontend.services.CrawlerService
 import nl.maas.filerenamer.frontend.services.TransmissionService
+import nl.maas.filerenamer.frontend.services.TupleConvertorService
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.objects.Torrent
 import nl.maas.wicket.framework.components.base.*
@@ -28,6 +29,9 @@ class TorrentPanel : RIAPanel() {
 
     @SpringBean
     private lateinit var modelCache: ModelCache
+
+    @SpringBean
+    private lateinit var tupleConvertorService: TupleConvertorService
 
     private val torrent = Torrent()
 
@@ -61,7 +65,7 @@ class TorrentPanel : RIAPanel() {
             true
         ) {
             override fun onClick(target: AjaxRequestTarget) {
-                modelCache.series = crawler.fetchSeries().toMutableList()
+                crawler.crawlForShows()
                 reload(target)
             }
         }
@@ -71,7 +75,7 @@ class TorrentPanel : RIAPanel() {
         return CollapsablePanelGroup(
             DynamicPanel.ROW_CONTENT_ID,
             60,
-            createSeriesTable(modelCache.series)
+            createSeriesTable(modelCache.series.map { tupleConvertorService.convert(it) })
         )
     }
 
@@ -86,16 +90,16 @@ class TorrentPanel : RIAPanel() {
 
     private fun createSeriesDataTable(value: List<Tuple>): DynamicDataTable {
         return DynamicDataTable.get(
-            CollapsablePanel.CONTENT_ID, value, onTupleClick =
+            CollapsablePanel.CONTENT_ID, value, rowsPerPage = 10, onTupleClick =
                 { target, tuple ->
-                    modelCache.foundEpisodes = crawler.getDownloadables(tuple.getValueForColumn("Series").toString())
+                    modelCache.chosenAnime = crawler.getDownloadables(tuple.getValueForColumn("Series").toString())
                     switchToPanel(SeriesPanel(), target)
                 })
     }
 
     private fun createDataTable(): DynamicDataTable {
         val pairs = transmission.getAllTorrents()
-        return DynamicDataTable.get(DynamicPanel.ROW_CONTENT_ID, pairs, 20, 50, translator, "Status")
+        return DynamicDataTable.get(DynamicPanel.ROW_CONTENT_ID, pairs, 5, 50, translator, "Status")
     }
 
     private fun createForm(): DynamicFormComponent<Torrent> {

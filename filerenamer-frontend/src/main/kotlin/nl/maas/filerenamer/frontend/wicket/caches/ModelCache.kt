@@ -4,9 +4,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import nl.maas.filerenamer.domain.ExtrapolationResult
 import nl.maas.filerenamer.extrapolation.FileMetaData
+import nl.maas.filerenamer.frontend.objects.data.Show
 import nl.maas.filerenamer.frontend.services.FileService
 import nl.maas.filerenamer.frontend.wicket.objects.SearchCriteria
-import nl.maas.wicket.framework.objects.Tuple
 import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Component
 import java.io.File
@@ -15,17 +15,17 @@ import javax.inject.Inject
 @Component
 class ModelCache : nl.maas.wicket.framework.services.ModelCache {
 
+    lateinit var chosenAnime: Show
     var selectedFolder: File? = null
     var files: Map<File, ExtrapolationResult> = mapOf()
     var searchCriteria: SearchCriteria = SearchCriteria()
-    var foundEpisodes: Map<String, List<String>> = mapOf()
-    var series: MutableList<Tuple> = mutableListOf()
+    var series: MutableList<Show> = mutableListOf()
 
     @Inject
     private lateinit var fileService: FileService
 
     override fun isEmpty(): Boolean {
-        return files.isEmpty() && foundEpisodes.isEmpty()
+        return files.isEmpty() && series.isEmpty()
     }
 
     override fun refresh() {

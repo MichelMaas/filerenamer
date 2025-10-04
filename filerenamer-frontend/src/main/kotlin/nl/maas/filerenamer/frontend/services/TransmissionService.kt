@@ -10,7 +10,9 @@ import java.util.*
 @Component
 class TransmissionService {
 
-    val transmissionClient = TransmissionClient(
+    val transmissionClient = client()
+
+    private fun client(): TransmissionClient = TransmissionClient(
         URI.create("http://10.0.0.6:8181/transmission/rpc"),
         "michel",
         Base64.getEncoder().encodeToString("llae2215".toByteArray()),
