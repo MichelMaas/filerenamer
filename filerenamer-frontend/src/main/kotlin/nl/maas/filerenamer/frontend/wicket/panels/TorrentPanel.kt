@@ -1,12 +1,14 @@
 package nl.maas.filerenamer.frontend.wicket.panels
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons
+import nl.maas.filerenamer.frontend.objects.data.Show
 import nl.maas.filerenamer.frontend.services.CrawlerService
 import nl.maas.filerenamer.frontend.services.TransmissionService
 import nl.maas.filerenamer.frontend.services.TupleConvertorService
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.objects.Torrent
 import nl.maas.wicket.framework.components.base.*
+import nl.maas.wicket.framework.components.elemental.AjaxSearchField
 import nl.maas.wicket.framework.components.elemental.SimpleAjaxButton
 import nl.maas.wicket.framework.panels.RIAPanel
 import nl.maas.wicket.framework.services.Translator
@@ -14,6 +16,7 @@ import org.apache.wicket.Component
 import org.apache.wicket.ajax.AjaxRequestTarget
 import org.apache.wicket.markup.html.link.AbstractLink
 import org.apache.wicket.model.CompoundPropertyModel
+import org.apache.wicket.model.Model
 import org.apache.wicket.spring.injection.annot.SpringBean
 
 class TorrentPanel : RIAPanel() {
@@ -35,6 +38,8 @@ class TorrentPanel : RIAPanel() {
 
     private var torrentTable: DynamicDataTable? = null
     private var seriesTable: DynamicDataTable? = null
+
+    private var filterString = ""
 
     private val torrent = Torrent()
 
@@ -64,8 +69,8 @@ class TorrentPanel : RIAPanel() {
         return object : SimpleAjaxButton(
             ComponentListView.CONTENT_ID,
             "Clean up",
-            Buttons.Type.Default,
-            Size.NORMAL,
+            Buttons.Type.Outline_Primary,
+            Size.SMALL,
             translator,
             true
         ) {
@@ -81,12 +86,13 @@ class TorrentPanel : RIAPanel() {
         return object : SimpleAjaxButton(
             ComponentListView.CONTENT_ID,
             "Fetch",
-            Buttons.Type.Default,
-            Size.NORMAL,
+            Buttons.Type.Outline_Primary,
+            Size.SMALL,
             translator,
             true
         ) {
             override fun onClick(target: AjaxRequestTarget) {
+                filterString = ""
                 crawler.crawlForShows()
                 seriesTable!!.update(modelCache.series.map { tupleConvertorService.convert(it) }, target)
             }
@@ -118,15 +124,36 @@ class TorrentPanel : RIAPanel() {
         )
     }
 
-    private fun createSeriesDataTable(): DynamicDataTable {
+    private fun createSeriesDataTable(): DynamicPanel {
+        filterString = ""
         val value = modelCache.series.map { tupleConvertorService.convert(it) }
         seriesTable = DynamicDataTable.get(
-            CollapsablePanel.CONTENT_ID, value, rowsPerPage = 20, onTupleClick =
+            DynamicPanel.ROW_CONTENT_ID, value, rowsPerPage = 20, onTupleClick =
                 { target, tuple ->
                     modelCache.chosenAnime = crawler.getDownloadables(tuple.getValueForColumn("Series").toString())
                     switchToPanel(SeriesPanel(), target)
                 })
-        return seriesTable!!
+        val panel = DynamicPanel(CollapsablePanel.CONTENT_ID).addRow("search", 12).addRow("table", 12)
+            .addOrReplaceComponentToColumn("table", 0, seriesTable!!)
+            .addOrReplaceComponentToColumn("search", 0, createSearchBar())
+        return panel
+    }
+
+    private fun filteredSeries(): List<Show> {
+        if (filterString.isBlank()) {
+            return modelCache.series
+        } else {
+            return modelCache.series.filter { it.name.contains(filterString, true) }
+        }
+    }
+
+    private fun createSearchBar(): Component {
+        return object : AjaxSearchField(DynamicPanel.ROW_CONTENT_ID, Model.of(filterString)) {
+            override fun onChange(target: AjaxRequestTarget) {
+                filterString = convertedInput ?: ""
+                seriesTable!!.update(filteredSeries().map { tupleConvertorService.convert(it) }, target)
+            }
+        }
     }
 
     private fun createDataTable(): DynamicDataTable {
