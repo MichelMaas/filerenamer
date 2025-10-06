@@ -42,7 +42,23 @@ class SeriesPanel : RIAPanel() {
         panel.addRow("buttons", 4, 4, 4)
         panel.addOrReplaceComponentToColumn("buttons", 0, createBatchesButton())
         panel.addOrReplaceComponentToColumn("buttons", 1, createEpisodesButton())
+        panel.addOrReplaceComponentToColumn("buttons", 2, createBackButton())
         addOrReplace(panel)
+    }
+
+    private fun createBackButton(): Component {
+        return object : SimpleAjaxButton(
+            ROW_CONTENT_ID,
+            "Return",
+            Buttons.Type.Primary,
+            SimpleAjaxButton.Size.NORMAL,
+            translator
+        ) {
+            override fun onClick(target: AjaxRequestTarget) {
+                switchToPanel(TorrentPanel(), target)
+            }
+
+        }
     }
 
     private fun createEpisodesButton(): Component {
@@ -55,6 +71,11 @@ class SeriesPanel : RIAPanel() {
         ) {
             override fun onClick(target: AjaxRequestTarget) {
                 modelCache.chosenAnime.episodes.forEach { transmission.addTorrent(it.magnetLink) }
+                switchToPanel(TorrentPanel(), target)
+            }
+
+            override fun isEnabled(): Boolean {
+                return modelCache.chosenAnime.episodes.isNotEmpty()
             }
         }
     }
@@ -69,6 +90,11 @@ class SeriesPanel : RIAPanel() {
         ) {
             override fun onClick(target: AjaxRequestTarget) {
                 modelCache.chosenAnime.batches.forEach { transmission.addTorrent(it.magnetLink) }
+                switchToPanel(TorrentPanel(), target)
+            }
+
+            override fun isEnabled(): Boolean {
+                return modelCache.chosenAnime.batches.isNotEmpty()
             }
         }
     }

@@ -48,7 +48,7 @@ class CrawlerService {
             throw InvalidArgumentException("No shows found with name: $name")
         } else {
             val show = modelCache.series.first { it.name.equals(name) }
-            return show
+            return subsPleaseCrawler.getAvailableDownloadables(show)
         }
     }
 

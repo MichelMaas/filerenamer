@@ -1,8 +1,8 @@
 package nl.maas.filerenamer.frontend.services
 
+import nl.maas.framework.torrent.domain.TorrentStatus
 import nl.maas.framework.torrent.rest.client.TransmissionClient
 import nl.maas.framework.torrent.transmission.io.TransmissionTorrent
-import nl.maas.wicket.framework.objects.Tuple
 import org.springframework.stereotype.Component
 import java.net.URI
 import java.util.*
@@ -19,22 +19,19 @@ class TransmissionService {
         true
     )
 
-    fun getAllTorrents(): List<Tuple> {
+    fun getAllTorrents(): List<TransmissionTorrent> {
         val torrents = transmissionClient.fetchAll()
-        return torrents.map { toTuple(it) }
+        return torrents
     }
 
     fun addTorrent(torrentUrl: String) {
         transmissionClient.addTorrent(torrentUrl)
     }
 
-    private fun toTuple(it: TransmissionTorrent): Tuple {
-        return Tuple(
-            listOf(
-                "Name" to it.name,
-                "Status" to it.getStatusEnum(),
-                "Progress" to it.percentComplete
-            ).toMap()
-        )
+    fun cleanUp() {
+        val torrents = transmissionClient.fetchAll().filter { it.getStatusEnum().equals(TorrentStatus.DONE) }
+        transmissionClient.removeTorrent(*torrents.toTypedArray())
     }
+
+
 }

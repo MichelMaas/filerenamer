@@ -8,11 +8,11 @@ import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.objects.Torrent
 import nl.maas.wicket.framework.components.base.*
 import nl.maas.wicket.framework.components.elemental.SimpleAjaxButton
-import nl.maas.wicket.framework.objects.Tuple
 import nl.maas.wicket.framework.panels.RIAPanel
 import nl.maas.wicket.framework.services.Translator
 import org.apache.wicket.Component
 import org.apache.wicket.ajax.AjaxRequestTarget
+import org.apache.wicket.markup.html.link.AbstractLink
 import org.apache.wicket.model.CompoundPropertyModel
 import org.apache.wicket.spring.injection.annot.SpringBean
 
@@ -33,6 +33,9 @@ class TorrentPanel : RIAPanel() {
     @SpringBean
     private lateinit var tupleConvertorService: TupleConvertorService
 
+    private var torrentTable: DynamicDataTable? = null
+    private var seriesTable: DynamicDataTable? = null
+
     private val torrent = Torrent()
 
     override fun onBeforeRender() {
@@ -41,23 +44,42 @@ class TorrentPanel : RIAPanel() {
     }
 
     private fun createScreen() {
-        val seriesTables = createSeriesTables()
+        val collapsables = createSeriesTables()
         val dynamicPanel =
-            DynamicPanel("panel").addRow("torrentList", 12).addRow("torrentURL", 12).addRow("seriesList", 2, 10)
-                .addOrReplaceComponentToColumn(
-                    "torrentList",
-                    0,
-                    createDataTable()
-                )
-                .addOrReplaceComponentToColumn("seriesList", 0, createFetchButton(seriesTables))
-                .addOrReplaceComponentToColumn("seriesList", 1, seriesTables)
-                .addOrReplaceComponentToColumn("torrentURL", 0, createForm())
+            DynamicPanel("panel").addRow("seriesList", 2, 1, 9)
+                .addOrReplaceComponentToColumn("seriesList", 0, createButtons())
+                .addOrReplaceComponentToColumn("seriesList", 2, collapsables)
         addOrReplace(dynamicPanel)
     }
 
-    private fun createFetchButton(seriesTables: CollapsablePanelGroup): Component {
-        return object : SimpleAjaxButton(
+    private fun createButtons(): Component {
+        return ButtonGroup(
             DynamicPanel.ROW_CONTENT_ID,
+            createCleanButton(),
+            createFetchButton()
+        )
+    }
+
+    private fun createCleanButton(): AbstractLink {
+        return object : SimpleAjaxButton(
+            ComponentListView.CONTENT_ID,
+            "Clean up",
+            Buttons.Type.Default,
+            Size.NORMAL,
+            translator,
+            true
+        ) {
+            override fun onClick(target: AjaxRequestTarget) {
+                transmission.cleanUp()
+                torrentTable!!.update(transmission.getAllTorrents().map { tupleConvertorService.convert(it) }, target)
+            }
+
+        }
+    }
+
+    private fun createFetchButton(): AbstractLink {
+        return object : SimpleAjaxButton(
+            ComponentListView.CONTENT_ID,
             "Fetch",
             Buttons.Type.Default,
             Size.NORMAL,
@@ -66,7 +88,7 @@ class TorrentPanel : RIAPanel() {
         ) {
             override fun onClick(target: AjaxRequestTarget) {
                 crawler.crawlForShows()
-                reload(target)
+                seriesTable!!.update(modelCache.series.map { tupleConvertorService.convert(it) }, target)
             }
         }
     }
@@ -75,31 +97,48 @@ class TorrentPanel : RIAPanel() {
         return CollapsablePanelGroup(
             DynamicPanel.ROW_CONTENT_ID,
             60,
-            createSeriesTable(modelCache.series.map { tupleConvertorService.convert(it) })
+            createTorrentsTableCollapsable(), createSeriesTableCollapsable()
         )
     }
 
-    private fun createSeriesTable(entry: List<Tuple>): CollapsablePanel {
+    private fun createTorrentsTableCollapsable(): CollapsablePanel {
+        return CollapsablePanel(
+            CollapsablePanelGroup.CONTENT_ID,
+            "Torrents",
+            createDataTable()
+        )
+    }
+
+    private fun createSeriesTableCollapsable(): CollapsablePanel {
         return CollapsablePanel(
             CollapsablePanelGroup.CONTENT_ID,
             "Series",
-            createSeriesDataTable(entry),
+            createSeriesDataTable(),
             _visible = modelCache.series.isNotEmpty()
         )
     }
 
-    private fun createSeriesDataTable(value: List<Tuple>): DynamicDataTable {
-        return DynamicDataTable.get(
-            CollapsablePanel.CONTENT_ID, value, rowsPerPage = 10, onTupleClick =
+    private fun createSeriesDataTable(): DynamicDataTable {
+        val value = modelCache.series.map { tupleConvertorService.convert(it) }
+        seriesTable = DynamicDataTable.get(
+            CollapsablePanel.CONTENT_ID, value, rowsPerPage = 20, onTupleClick =
                 { target, tuple ->
                     modelCache.chosenAnime = crawler.getDownloadables(tuple.getValueForColumn("Series").toString())
                     switchToPanel(SeriesPanel(), target)
                 })
+        return seriesTable!!
     }
 
     private fun createDataTable(): DynamicDataTable {
-        val pairs = transmission.getAllTorrents()
-        return DynamicDataTable.get(DynamicPanel.ROW_CONTENT_ID, pairs, 5, 50, translator, "Status")
+        val tuples = transmission.getAllTorrents().map { tupleConvertorService.convert(it) }
+        torrentTable = DynamicDataTable.get(
+            DynamicPanel.ROW_CONTENT_ID,
+            tuples,
+            20,
+            translator = translator,
+            translateContent = arrayOf("Status")
+        )
+        return torrentTable!!
     }
 
     private fun createForm(): DynamicFormComponent<Torrent> {
