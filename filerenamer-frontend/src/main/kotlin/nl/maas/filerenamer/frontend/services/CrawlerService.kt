@@ -24,6 +24,8 @@ class CrawlerService {
     @Inject
     protected lateinit var subsPleaseCrawler: SubsPleaseCrawler
 
+    @Inject
+    protected lateinit var myAnimeListService: MyAnimeListService
 
     init {
 
@@ -48,6 +50,7 @@ class CrawlerService {
             throw InvalidArgumentException("No shows found with name: $name")
         } else {
             val show = modelCache.series.first { it.name.equals(name) }
+            myAnimeListService.addAnimeInformation(show)
             return subsPleaseCrawler.getAvailableDownloadables(show)
         }
     }
@@ -56,7 +59,6 @@ class CrawlerService {
         val start = LocalTime.now()
         modelCache.series.addAll(subsPleaseCrawler.getAvailableAnime())
         val end = LocalTime.now()
-
-        println("Crawl completed in ${Duration.between(start, end)}")
+        println("Crawl completed in ${Duration.between(start, end).toMinutes()} minutes")
     }
 }

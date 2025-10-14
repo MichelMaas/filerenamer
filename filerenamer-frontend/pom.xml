@@ -16,7 +16,7 @@
         <wicket-bootstrap.version>6.0.2</wicket-bootstrap.version>
         <wicket-bootstrap-less.version>4.0.4</wicket-bootstrap-less.version>
         <javafx.version>11</javafx.version>
-        <wicket.framework.lib.version>2025.01-SNAPSHOT</wicket.framework.lib.version>
+        <wicket.framework.lib.version>2025.02-SNAPSHOT</wicket.framework.lib.version>
     </properties>
 
     <repositories>
@@ -135,7 +135,7 @@
         </dependency>
         <dependency>
             <groupId>nl.maas.framework</groupId>
-            <artifactId>easy.torrent.framework</artifactId>
+            <artifactId>easy-torrent-framework-lib</artifactId>
             <version>${wicket.framework.lib.version}</version>
         </dependency>
 
@@ -242,6 +242,12 @@
             <groupId>com.sleepycat</groupId>
             <artifactId>je</artifactId>
             <version>5.0.73</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/dev.katsute/mal4j -->
+        <dependency>
+            <groupId>dev.katsute</groupId>
+            <artifactId>mal4j</artifactId>
+            <version>3.4.3</version>
         </dependency>
     </dependencies>
 
