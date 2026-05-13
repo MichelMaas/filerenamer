@@ -35,7 +35,7 @@ private fun processFiles(
     val fileData = filesIn.get(key)!!.map { file -> FileMetaData(file) }
     val sequenceForFiles = sequenceExtrapolator.findSequenceForFiles(fileData)
     processFailedSequences(sequenceForFiles)
-    NewNameExtrapolator().determineNameForFiles(sequenceForFiles.files)
+    NewNameExtrapolator(SEQUENCE.NUMBER).determineNameForFiles(sequenceForFiles.files)
     if (dryRun) {
         fileData.filter { fileMetaData ->
             !fileMetaData.newName.isNullOrBlank() && !fileMetaData.newName.equals(

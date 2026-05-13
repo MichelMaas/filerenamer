@@ -137,7 +137,11 @@ class DetailPanel : RIAPanel() {
             override fun onAfterSubmit(target: AjaxRequestTarget, typedModelObject: FileMetaData) {
                 super.onAfterSubmit(target, typedModelObject)
                 selected = null
-                fileService.update(fileMetaData, modelCache.files[modelCache.selectedFolder]!!.sequence.size)
+                fileService.update(
+                    fileMetaData,
+                    modelCache.files[modelCache.selectedFolder]!!.sequence.size,
+                    modelCache.searchCriteria.sequence
+                )
                 target.add(this@DetailPanel)
             }
 

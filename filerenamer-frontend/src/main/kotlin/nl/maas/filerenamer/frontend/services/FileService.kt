@@ -14,6 +14,7 @@ import java.io.Serializable
 @Component
 class FileService : Serializable {
 
+
     fun findIn(path: String): Map<File, List<FileMetaData>> {
         val filesIn = FileHandler().searchFilesIn(path)
         return filesIn.mapNotNull { it.key to it.value.filter { fl -> fl.isFile }.map { fl -> FileMetaData(fl) } }
@@ -25,7 +26,7 @@ class FileService : Serializable {
         val sequenceExtrapolator = SequenceExtrapolator.instance(sequence)
         val sequenced = findIn.filter { it.value.isNotEmpty() }
             .map { it.key to sequenceExtrapolator.findSequenceForFiles(it.value) }.toMap()
-        sequenced.forEach { NewNameExtrapolator().determineNameForFiles(it.value.files) }
+        sequenced.forEach { NewNameExtrapolator(sequence).determineNameForFiles(it.value.files) }
         return sequenced.filter { it.value.renameRequired() }
     }
 
@@ -33,8 +34,8 @@ class FileService : Serializable {
         files.forEach { FileHandler().renameFiles(RenameOrder(it.file, it.newName)) }
     }
 
-    fun update(file: FileMetaData, numberOfFiles: Int) {
-        file.proposedNames = NewNameExtrapolator.determineName(file, numberOfFiles)
+    fun update(file: FileMetaData, numberOfFiles: Int, sequence: SEQUENCE) {
+        file.proposedNames = NewNameExtrapolator.determineName(file, numberOfFiles, sequence)
         file.newName = if (file.includeParentMapInName) file.proposedNames[1] else file.proposedNames[0]
     }
 }

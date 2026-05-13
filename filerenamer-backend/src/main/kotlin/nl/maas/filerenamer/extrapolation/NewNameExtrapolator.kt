@@ -1,11 +1,13 @@
 package nl.maas.filerenamer.extrapolation
 
-class NewNameExtrapolator {
+import nl.maas.filerenamer.domain.enums.SEQUENCE
+
+class NewNameExtrapolator(val sequence: SEQUENCE) {
     private var numberOfFiles: Int = 0
 
     companion object {
-        fun determineName(fileMetaData: FileMetaData, numberOfFiles: Int): Array<String> {
-            val newNameExtrapolator = NewNameExtrapolator()
+        fun determineName(fileMetaData: FileMetaData, numberOfFiles: Int, sequence: SEQUENCE): Array<String> {
+            val newNameExtrapolator = NewNameExtrapolator(sequence)
             newNameExtrapolator.numberOfFiles = numberOfFiles
             return newNameExtrapolator.determineName(fileMetaData)
         }
@@ -26,14 +28,24 @@ class NewNameExtrapolator {
                 "${fileMetaData.file.parentFile.parentFile.name}.${fileMetaData.name}.${fileMetaData.file.extension}"
             )
         } else {
-            arrayOf(
-                "${fileMetaData.dirName} - ${
-                    (fileMetaData.sequence ?: 0).toString().padStart(fillerLength, '0')
-                }.${fileMetaData.file.extension}",
-                "${fileMetaData.file.parentFile.parentFile.name}.${fileMetaData.dirName} - ${
-                    (fileMetaData.sequence ?: 0).toString().padStart(fillerLength, '0')
-                }.${fileMetaData.file.extension}"
-            )
+            when (sequence) {
+                SEQUENCE.NUMBER ->
+                    arrayOf(
+                        "${fileMetaData.dirName} - ${
+                            (fileMetaData.sequence ?: 0).toString().padStart(fillerLength, '0')
+                        }.${fileMetaData.file.extension}",
+                        "${fileMetaData.file.parentFile.parentFile.name}.${fileMetaData.dirName} - ${
+                            (fileMetaData.sequence ?: 0).toString().padStart(fillerLength, '0')
+                        }.${fileMetaData.file.extension}"
+                    )
+
+                else -> arrayOf(
+                    "${fileMetaData.sequence}.${fileMetaData.file.extension}",
+                    "${fileMetaData.dirName} - ${
+                        (fileMetaData.sequence ?: 0).toString().padStart(fillerLength, '0')
+                    }.${fileMetaData.file.extension}"
+                )
+            }
         }
         if (wasManuallyAltered(fileMetaData, names)) {
             return fileMetaData.proposedNames
