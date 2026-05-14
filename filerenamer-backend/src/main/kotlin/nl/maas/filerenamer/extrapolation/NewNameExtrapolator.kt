@@ -1,6 +1,7 @@
 package nl.maas.filerenamer.extrapolation
 
 import nl.maas.filerenamer.domain.enums.SEQUENCE
+import nl.maas.filerenamer.io.NominatimClient
 
 class NewNameExtrapolator(val sequence: SEQUENCE) {
     private var numberOfFiles: Int = 0
@@ -40,7 +41,7 @@ class NewNameExtrapolator(val sequence: SEQUENCE) {
                     )
 
                 else -> arrayOf(
-                    "${fileMetaData.sequence}.${fileMetaData.file.extension}",
+                    "${fileMetaData.sequence} - ${NominatimClient.fetchLocation(fileMetaData.file)}.${fileMetaData.file.extension}",
                     "${fileMetaData.dirName} - ${
                         (fileMetaData.sequence ?: 0).toString().padStart(fillerLength, '0')
                     }.${fileMetaData.file.extension}"
