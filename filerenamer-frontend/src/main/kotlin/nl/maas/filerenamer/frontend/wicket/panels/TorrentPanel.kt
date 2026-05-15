@@ -157,7 +157,8 @@ class TorrentPanel : RIAPanel() {
     }
 
     private fun createDataTable(): DynamicDataTable {
-        val tuples = transmission.getAllTorrents().map { tupleConvertorService.convert(it) }
+        var tuples = transmission.getAllTorrents().map { tupleConvertorService.convert(it) }
+        if (tuples.isEmpty()) tuples = listOf(nl.maas.wicket.framework.objects.Tuple(mapOf("" to "No torrents found")))
         torrentTable = DynamicDataTable.get(
             DynamicPanel.ROW_CONTENT_ID,
             tuples,
