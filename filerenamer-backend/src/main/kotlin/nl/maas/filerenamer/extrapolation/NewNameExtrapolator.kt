@@ -51,7 +51,14 @@ class NewNameExtrapolator(val sequence: SEQUENCE) {
         if (wasManuallyAltered(fileMetaData, names)) {
             return fileMetaData.proposedNames
         }
-        return names
+        return names.map { sanitizeFileName(it) }.toTypedArray()
+    }
+
+    private fun sanitizeFileName(name: String): String {
+        return name
+            .replace(Regex("""[\\/:*?"<>|\p{Cntrl}]+"""), " - ")
+            .replace(Regex("""\s+"""), " ")
+            .trim()
     }
 
     private fun wasManuallyAltered(fileMetaData: FileMetaData, determinedNewName: Array<String>): Boolean {

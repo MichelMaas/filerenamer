@@ -1,17 +1,17 @@
 package nl.maas.filerenamer.io
 
 import org.apache.commons.lang3.StringUtils
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
+import java.io.File
 
 class FileUtils {
     companion object {
         fun findFile(fileName: String): String {
-            return Files.find(Paths.get("../"), 10, { t, u -> t.toAbsolutePath().toString().endsWith(fileName) })
-                .findAny().orElse(
-                    Path.of(StringUtils.EMPTY)
-                ).toAbsolutePath().toString()
+            return File("../")
+                .walkTopDown()
+                .onFail { _, _ -> }
+                .maxDepth(10)
+                .firstOrNull { it.absolutePath.endsWith(fileName) }
+                ?.absolutePath ?: StringUtils.EMPTY
         }
     }
 }

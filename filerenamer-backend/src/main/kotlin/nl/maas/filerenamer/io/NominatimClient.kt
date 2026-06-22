@@ -34,8 +34,6 @@ object NominatimClient {
             val location = fetchLocation(latitude, longitude)
             if (location.isNotBlank())
                 cache.put(cacheKey, location)
-        } else {
-            println("Location $cacheKey already in cache")
         }
 
         return cache[cacheKey] ?: StringUtils.EMPTY
