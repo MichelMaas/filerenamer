@@ -1,15 +1,15 @@
 package nl.maas.filerenamer.frontend.services
 
+import jakarta.inject.Inject
 import nl.maas.filerenamer.frontend.objects.data.Show
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.caches.PropertiesCache
 import nl.maas.filerenamer.frontend.wicket.tools.SubsPleaseCrawler
 import nl.maas.wicket.framework.objects.Tuple
-import org.openqa.selenium.InvalidArgumentException
 import org.springframework.stereotype.Component
+import java.security.InvalidParameterException
 import java.time.Duration
 import java.time.LocalTime
-import javax.inject.Inject
 
 
 @Component
@@ -47,7 +47,7 @@ class CrawlerService {
 
     fun getDownloadables(name: String): Show {
         if (modelCache.series.none { it.name.equals(name) }) {
-            throw InvalidArgumentException("No shows found with name: $name")
+            throw InvalidParameterException("No shows found with name: $name")
         } else {
             val show = modelCache.series.first { it.name.equals(name) }
             myAnimeListService.addAnimeInformation(show)

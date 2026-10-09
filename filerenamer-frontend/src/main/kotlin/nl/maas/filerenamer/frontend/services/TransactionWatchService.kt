@@ -1,5 +1,6 @@
 package nl.maas.filerenamer.frontend.services
 
+import jakarta.inject.Inject
 import nl.maas.filerenamer.frontend.wicket.caches.ModelCache
 import nl.maas.filerenamer.frontend.wicket.caches.PropertiesCache
 import org.springframework.stereotype.Component
@@ -9,7 +10,6 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import javax.inject.Inject
 
 @Component
 class TransactionWatchService private @Inject constructor(

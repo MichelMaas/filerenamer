@@ -1,27 +1,13 @@
 package nl.maas.filerenamer.frontend
 
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import nl.maas.filerenamer.io.FileUtils
-import nl.maas.wicket.framework.viewer.Viewer
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebDriverException
-import org.openqa.selenium.edge.EdgeDriver
-import org.openqa.selenium.edge.EdgeOptions
-import org.openqa.selenium.io.Zip
-import org.springframework.boot.ExitCodeGenerator
-import org.springframework.boot.SpringApplication
+import nl.maas.wicket.framework.viewer.Viewers
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
-import java.io.FileInputStream
-import java.io.IOException
-import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 
 
 @Singleton
@@ -30,10 +16,15 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
 
     @Inject
     private lateinit var appContext: ApplicationContext
-    val viewer = Viewer.get()
+    val viewer = Viewers.viewer
     private fun startBrowser() {
         val url = "http://localhost:8080"
-        viewer.startBrowser(url)
+        val icon = FileUtils.findFile("brand.png")
+        viewer.icon = icon
+        viewer.startBrowser(url, "FileRenamer")
+        viewer.onCloseRequest {
+            System.exit(0)
+        }
     }
 
     fun close() {

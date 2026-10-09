@@ -10,13 +10,8 @@
     <artifactId>filerenamer-frontend</artifactId>
 
     <properties>
-        <wicketstuff.version>9.5.0</wicketstuff.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <wicket.version>9.12.0</wicket.version>
-        <wicket-bootstrap.version>6.0.2</wicket-bootstrap.version>
-        <wicket-bootstrap-less.version>4.0.4</wicket-bootstrap-less.version>
-        <javafx.version>11</javafx.version>
-        <wicket.framework.lib.version>2025.02-SNAPSHOT</wicket.framework.lib.version>
+        <wicket.framework.lib.version>2026.01-SNAPSHOT</wicket.framework.lib.version>
     </properties>
 
     <repositories>
@@ -38,59 +33,15 @@
         </dependency>
 
         <dependency>
-            <groupId>com.giffing.wicket.spring.boot.starter</groupId>
-            <artifactId>wicket-spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-context</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-autoconfigure</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.wicketstuff</groupId>
-            <artifactId>wicketstuff-annotation</artifactId>
-            <version>${wicketstuff.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>com.github.therealbush</groupId>
             <artifactId>translator</artifactId>
             <version>1.0.2</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.wicketstuff/wicketstuff-progressbar -->
-        <dependency>
-            <groupId>org.wicketstuff</groupId>
-            <artifactId>wicketstuff-progressbar</artifactId>
-            <version>${wicketstuff.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.martinspielmann.wicket</groupId>
-            <artifactId>wicket-chartjs</artifactId>
-            <version>9.0.0-M2</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-tomcat</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-jetty</artifactId>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -110,27 +61,10 @@
             <artifactId>kotlin-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-extensions</artifactId>
-            <version>${wicket.version}</version>
-        </dependency>
 
         <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-request</artifactId>
-            <version>${wicket.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-util</artifactId>
-            <version>${wicket.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>nl.maas.wicket.framework</groupId>
-            <artifactId>wicket.framework.lib</artifactId>
+            <groupId>nl.maas.framework</groupId>
+            <artifactId>easy-wicket-framework-lib</artifactId>
             <version>${wicket.framework.lib.version}</version>
         </dependency>
         <dependency>
@@ -145,6 +79,11 @@
         </dependency>
 
         <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
         </dependency>
@@ -152,67 +91,14 @@
 
         <!--        Bootstrap-->
         <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-core</artifactId>
-            <version>${wicket-bootstrap.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-extensions</artifactId>
-            <version>${wicket-bootstrap.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-less</artifactId>
-            <version>${wicket-bootstrap-less.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>3.6.4</version>
         </dependency>
 
         <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-themes</artifactId>
-            <version>${wicket-bootstrap.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.webjars</groupId>
-                    <artifactId>jquery</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-web</artifactId>
-            <version>${javafx.version}</version>
         </dependency>
 
         <dependency>
@@ -252,8 +138,6 @@
     </dependencies>
 
     <build>
-        <!--        <sourceDirectory>src/main/javasrc/main/kotlin</sourceDirectory>-->
-        <!--        <sourceDirectory>src/main/kotlin</sourceDirectory>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -262,7 +146,6 @@
                     <jvmArguments>
                         ${jvm.options}
                     </jvmArguments>
-                    <fork>false</fork>
                     <skip>false</skip>
                 </configuration>
                 <executions>
