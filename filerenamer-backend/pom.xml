@@ -11,7 +11,7 @@
     <parent>
         <groupId>nl.maas.filerenamer</groupId>
         <artifactId>filerenamer</artifactId>
-        <version>2026.2</version>
+        <version>2026.3-SNAPSHOT</version>
     </parent>
 
     <properties>
