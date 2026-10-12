@@ -1,6 +1,5 @@
 package nl.maas.filerenamer.frontend.wicket.tools
 
-import jakarta.inject.Inject
 import nl.maas.filerenamer.frontend.objects.data.Batch
 import nl.maas.filerenamer.frontend.objects.data.Episode
 import nl.maas.filerenamer.frontend.objects.data.Show
@@ -8,7 +7,6 @@ import nl.maas.framework.io.utils.AppDirectories
 import nl.maas.wicket.framework.domain.scrapers.ScrapeElement
 import nl.maas.wicket.framework.viewer.ScrapeViewer
 import nl.maas.wicket.framework.viewer.Viewers
-import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 
 private const val MAIN_URL = "https://subsplease.org/shows"
@@ -16,9 +14,6 @@ private const val MAIN_URL = "https://subsplease.org/shows"
 @Component
 class SubsPleaseCrawler {
 
-    @Inject
-    private lateinit var appContext: ApplicationContext
-    private final val HEADLESS = true
     private val appName = "FileRenamer"
 
 

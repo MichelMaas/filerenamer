@@ -20,17 +20,29 @@ class TransmissionService {
     )
 
     fun getAllTorrents(): List<TransmissionTorrent> {
-        val torrents = transmissionClient.fetchAll()
+        val torrents = try {
+            transmissionClient.fetchAll()
+        } catch (ex: Exception) {
+            emptyList()
+        }
         return torrents
     }
 
     fun addTorrent(torrentUrl: String) {
-        transmissionClient.addTorrent(torrentUrl)
+        try {
+            transmissionClient.addTorrent(torrentUrl)
+        } catch (ex: Exception) {
+            println(ex.message)
+        }
     }
 
     fun cleanUp() {
-        val torrents = transmissionClient.fetchAll().filter { it.getStatusEnum().equals(TorrentStatus.DONE) }
-        transmissionClient.removeTorrent(*torrents.toTypedArray())
+        try {
+            val torrents = transmissionClient.fetchAll().filter { it.getStatusEnum().equals(TorrentStatus.DONE) }
+            transmissionClient.removeTorrent(*torrents.toTypedArray())
+        } catch (ex: Exception) {
+            println(ex.message)
+        }
     }
 
 
