@@ -10,7 +10,7 @@
     <groupId>nl.maas.filerenamer</groupId>
     <artifactId>filerenamer</artifactId>
     <packaging>pom</packaging>
-    <version>2026.1</version>
+    <version>2026.2-SNAPSHOT</version>
 
     <modules>
         <module>filerenamer-backend</module>
@@ -30,7 +30,7 @@
             https://github.com/MichelMaas/filerenamer
         </url>
 
-        <tag>filerenamer-2026.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
