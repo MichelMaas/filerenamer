@@ -12,7 +12,7 @@
     <parent>
         <groupId>nl.maas.filerenamer</groupId>
         <artifactId>filerenamer</artifactId>
-        <version>2022.1</version>
+        <version>2026.1-SNAPSHOT</version>
     </parent>
 
     <properties>

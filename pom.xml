@@ -12,7 +12,7 @@
     <groupId>nl.maas.filerenamer</groupId>
     <artifactId>filerenamer</artifactId>
     <packaging>pom</packaging>
-    <version>2022.1</version>
+    <version>2026.1-SNAPSHOT</version>
 
     <modules>
         <module>filerenamer-backend</module>
@@ -30,6 +30,20 @@
 
     <properties>
         <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
+        <jpackage.app.name>FileRenamer</jpackage.app.name>
+        <jpackage.vendor>Michel Maas</jpackage.vendor>
+
+        <jpackage.main.jar>
+            ${project.build.finalName}-exec.jar
+        </jpackage.main.jar>
+
+        <jpackage.icon>
+            ${project.basedir}/bin/icon.png
+        </jpackage.icon>
+
+        <jpackage.assembly.descriptor>
+            ${project.basedir}/assembly.xml
+        </jpackage.assembly.descriptor>
     </properties>
 
     <repositories>

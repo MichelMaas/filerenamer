@@ -4,7 +4,7 @@
     <parent>
         <groupId>nl.maas.filerenamer</groupId>
         <artifactId>filerenamer</artifactId>
-        <version>2022.1</version>
+        <version>2026.1-SNAPSHOT</version>
     </parent>
     <groupId>nl.maas.filerenamer</groupId>
     <artifactId>filerenamer-frontend</artifactId>
@@ -256,6 +256,10 @@
             <!--                    <outputDirectory>${project.basedir}/target/${project.version}/</outputDirectory>-->
             <!--                </configuration>-->
             <!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -289,139 +293,61 @@
 
     <profiles>
         <profile>
-            <id>release-linux</id>
+            <id>package-linux-deb</id>
 
-            <activation>
-                <os>
-                    <family>linux</family>
-                </os>
-            </activation>
-
-            <dependencies>
-                <dependency>
-                    <groupId>me.friwi</groupId>
-                    <artifactId>jcef-natives-linux-amd64</artifactId>
-                    <version>
-                        jcef-d3de827+cef-146.0.10+g8219561+chromium-146.0.7680.179
-                    </version>
-                </dependency>
-            </dependencies>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.panteleyev</groupId>
-                        <artifactId>jpackage-maven-plugin</artifactId>
-                        <version>1.8.0</version>
 
-                        <executions>
-                            <execution>
-                                <id>build-linux-package</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>jpackage</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-
-                        <configuration>
-                            <name>FileRenamer</name>
-                            <type>DEB</type>
-
-                            <input>${project.build.directory}/jpackage-input</input>
-                            <mainJar>${project.build.finalName}-exec.jar</mainJar>
-                            <!--                        <resourceDir>${project.basedir}/src/jpackage/linux</resourceDir>-->
-
-                            <destination>${project.build.directory}/jpackage-deb</destination>
-                            <removeDestination>true</removeDestination>
-
-                            <appVersion>${project.version}</appVersion>
-
-                            <description>FileRenamer</description>
-                            <vendor>Michel Maas</vendor>
-
-                            <icon>${project.basedir}/bin/icon.png</icon>
-
-                            <linuxPackageName>filerenamer</linuxPackageName>
-                            <linuxShortcut>true</linuxShortcut>
-                            <linuxMenuGroup>Utility</linuxMenuGroup>
-
-                            <javaOptions>
-                                <option>-Dfilerenamer.appdir=$APPDIR</option>
-                                <option>--add-exports=java.base/java.lang=ALL-UNNAMED</option>
-                                <option>--add-exports=java.desktop/sun.awt=ALL-UNNAMED</option>
-                                <option>--add-exports=java.desktop/sun.java2d=ALL-UNNAMED</option>
-                            </javaOptions>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>3.6.4</version>
-
-                        <executions>
-                            <execution>
-                                <id>install-playwright-chromium</id>
-                                <phase>prepare-package</phase>
-
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-
-                                <configuration>
-                                    <executable>${java.home}/bin/java</executable>
-
-                                    <environmentVariables>
-                                        <PLAYWRIGHT_BROWSERS_PATH>
-                                            ${project.build.directory}/playwright
-                                        </PLAYWRIGHT_BROWSERS_PATH>
-                                    </environmentVariables>
-
-                                    <arguments>
-                                        <argument>-classpath</argument>
-                                        <classpath/>
-
-                                        <argument>com.microsoft.playwright.CLI</argument>
-                                        <argument>install</argument>
-                                        <argument>--only-shell</argument>
-                                        <argument>chromium</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-
-                        <executions>
-                            <execution>
-                                <id>prepare-jpackage-input</id>
-                                <phase>post-integration-test</phase>
-
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-
-                                <configuration>
-                                    <descriptors>
-                                        <descriptor>
-                                            <!--                                            src/assembly/jpackage.xml-->
-                                            assembly.xml
-                                        </descriptor>
-                                    </descriptors>
-
-                                    <outputDirectory>
-                                        ${project.build.directory}
-                                    </outputDirectory>
-
-                                    <finalName>jpackage-input</finalName>
-
-                                    <appendAssemblyId>false</appendAssemblyId>
-                                    <ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
+
+                    <plugin>
+                        <groupId>org.panteleyev</groupId>
+                        <artifactId>jpackage-maven-plugin</artifactId>
+                        <configuration>
+                            <type>DEB</type>
+
+                            <linuxPackageName>
+                                filerenamer
+                            </linuxPackageName>
+
+                            <linuxShortcut>true</linuxShortcut>
+                            <linuxMenuGroup>Utility</linuxMenuGroup>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>package-linux-rpm</id>
+
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.panteleyev</groupId>
+                        <artifactId>jpackage-maven-plugin</artifactId>
+
+                        <configuration>
+                            <type>RPM</type>
+
+                            <linuxPackageName>
+                                filerenamer
+                            </linuxPackageName>
+
+                            <linuxShortcut>true</linuxShortcut>
+                            <linuxMenuGroup>Utility</linuxMenuGroup>
+                        </configuration>
+                    </plugin>
+
                 </plugins>
             </build>
         </profile>
