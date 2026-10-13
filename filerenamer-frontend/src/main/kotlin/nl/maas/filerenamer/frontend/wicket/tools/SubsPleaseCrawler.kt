@@ -3,7 +3,6 @@ package nl.maas.filerenamer.frontend.wicket.tools
 import nl.maas.filerenamer.frontend.objects.data.Batch
 import nl.maas.filerenamer.frontend.objects.data.Episode
 import nl.maas.filerenamer.frontend.objects.data.Show
-import nl.maas.framework.io.utils.AppDirectories
 import nl.maas.wicket.framework.domain.scrapers.ScrapeElement
 import nl.maas.wicket.framework.viewer.ScrapeViewer
 import nl.maas.wicket.framework.viewer.Viewers
@@ -19,8 +18,7 @@ class SubsPleaseCrawler {
 
     fun getAvailableAnime(): List<Show> {
         val viewer = Viewers.scraper
-        viewer.setBrowserLocation(AppDirectories.cacheDir(appName))
-        viewer.startBrowser(MAIN_URL)
+        viewer.startBrowser(MAIN_URL, appName)
         val shows = getShows(viewer)
         viewer.close()
         return shows
@@ -28,8 +26,7 @@ class SubsPleaseCrawler {
 
     fun getAvailableDownloadables(show: Show): Show {
         val viewer = Viewers.scraper
-        viewer.setBrowserLocation(AppDirectories.cacheDir(appName))
-        viewer.startBrowser(show.showHome)
+        viewer.startBrowser(show.showHome, appName)
         show.batches = getBatchesForAnime(viewer)
         show.episodes = getEpisodesForAnime(viewer)
         return show

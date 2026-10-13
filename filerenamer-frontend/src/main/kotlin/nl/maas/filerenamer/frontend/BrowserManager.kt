@@ -2,7 +2,6 @@ package nl.maas.filerenamer.frontend
 
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import nl.maas.framework.io.utils.AppDirectories
 import nl.maas.framework.io.utils.FileUtils
 import nl.maas.wicket.framework.viewer.Viewers
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -25,7 +24,6 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
         val url = "http://localhost:8080"
         val icon = FileUtils.pathFromResourceOrPath("brand.png")
         icon?.let { viewer.icon = it.absolutePathString() }
-        viewer.setBrowserLocation(AppDirectories.cacheDir(appName))
         viewer.startBrowser(url, appName)
         viewer.onCloseRequest {
             System.exit(0)
