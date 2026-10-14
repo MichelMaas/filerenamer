@@ -3,7 +3,7 @@
     <parent>
         <groupId>nl.maas.filerenamer</groupId>
         <artifactId>filerenamer</artifactId>
-        <version>2026.3</version>
+        <version>2026.4-SNAPSHOT</version>
     </parent>
     <groupId>nl.maas.filerenamer</groupId>
     <artifactId>filerenamer-frontend</artifactId>
