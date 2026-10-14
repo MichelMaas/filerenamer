@@ -11,7 +11,7 @@
 
     <properties>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <wicket.framework.lib.version>2026.02-SNAPSHOT</wicket.framework.lib.version>
+        <wicket.framework.lib.version>2026.03-SNAPSHOT</wicket.framework.lib.version>
     </properties>
 
     <repositories>
