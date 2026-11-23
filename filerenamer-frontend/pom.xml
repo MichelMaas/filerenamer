@@ -303,6 +303,10 @@
 
                             <linuxShortcut>true</linuxShortcut>
                             <linuxMenuGroup>Utility</linuxMenuGroup>
+
+                            <destination>/home/michel/shares/downloads/Debs</destination>
+                            <removeDestination>false</removeDestination>
+
                         </configuration>
                     </plugin>
 
