@@ -23,7 +23,7 @@ class BrowserManager private constructor() : ApplicationListener<ApplicationRead
     private fun startBrowser() {
         val url = "http://localhost:8080"
         val icon = FileUtils.findFileOrFolderInAnyAppFolder(
-            "brand.png", appName
+            "FileRenamer.png", appName
         )
 
         icon?.let { viewer.icon = it.absolutePathString() }

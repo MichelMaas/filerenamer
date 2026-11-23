@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>nl.maas.filerenamer</groupId>
@@ -10,18 +11,13 @@
 
     <properties>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <wicket.framework.lib.version>2026.03</wicket.framework.lib.version>
+        <wicket.framework.lib.version>2026.04-SNAPSHOT</wicket.framework.lib.version>
     </properties>
 
     <repositories>
         <repository>
             <id>jitpack</id>
             <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>repsy</id>
-            <name>My Private Maven Repository on Repsy</name>
-            <url>https://repo.repsy.io/mvn/michelmaas/default</url>
         </repository>
     </repositories>
     <dependencies>
@@ -249,12 +245,6 @@
                     <mainClass>HelloFX</mainClass>
                 </configuration>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <artifactId>maven-assembly-plugin</artifactId>-->
-            <!--                <configuration>-->
-            <!--                    <outputDirectory>${project.basedir}/target/${project.version}/</outputDirectory>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
